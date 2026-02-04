@@ -35,9 +35,10 @@ const App: React.FC = () => {
         <Route path="/industries" element={<Layout><IndustriesIndex /></Layout>} />
         <Route path="/industries/:slug" element={<Layout><IndustryPage /></Layout>} />
         
-        {/* Private / Internal Routes - No Public Layout */}
+        {/* Private / Internal Routes */}
         <Route path="/audit/:secureId" element={<AuditReport />} />
-        <Route path="/internal/create" element={<Layout><InternalCreateAudit /></Layout>} />
+        {/* Internal Tool with Public Layout for easy navigation access */}
+        <Route path="/internal/create-audit" element={<Layout><InternalCreateAudit /></Layout>} />
 
         {/* Fallback */}
         <Route path="*" element={<Layout><Home /></Layout>} />
