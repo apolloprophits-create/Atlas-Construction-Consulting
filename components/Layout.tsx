@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { INDUSTRIES } from '../constants';
 import Button from './ui/Button';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -21,7 +20,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
-    setActiveDropdown(false);
   }, [location]);
 
   // Organization Structured Data
@@ -64,40 +62,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </Link>
 
             {/* Desktop Nav */}
-            <div className="hidden md:flex items-center space-x-8">
-              <div 
-                className="relative group"
-                onMouseEnter={() => setActiveDropdown(true)}
-                onMouseLeave={() => setActiveDropdown(false)}
-              >
-                <button
-                  type="button"
-                  onClick={() => setActiveDropdown((prev) => !prev)}
-                  className="flex items-center gap-1 font-medium text-sm text-brand-secondary hover:text-brand-dark py-2"
-                >
-                  Industries <ChevronDown className="w-4 h-4" />
-                </button>
-                {/* Mega Menu / Dropdown */}
-                {activeDropdown && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] bg-white rounded-xl shadow-xl border border-brand-border p-6 grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2">
-                     {Object.values(INDUSTRIES).map((ind) => (
-                       <Link 
-                        key={ind.slug} 
-                        to={`/${ind.slug}`}
-                        className="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors"
-                       >
-                         <div className="mt-1 text-brand-accent">
-                            {/* Simple dot or icon could go here */}
-                            <div className="w-2 h-2 rounded-full bg-brand-accent" />
-                         </div>
-                         <div>
-                           <div className="font-semibold text-brand-dark text-sm">{ind.name}</div>
-                           <div className="text-xs text-brand-secondary leading-tight mt-0.5 line-clamp-1">{ind.heroHeadline}</div>
-                         </div>
-                       </Link>
-                     ))}
-                  </div>
-                )}
+            <div className="hidden md:flex items-center space-x-6">
+              <div className="flex items-center gap-4">
+                {Object.values(INDUSTRIES).map((ind) => (
+                  <Link
+                    key={ind.slug}
+                    to={`/${ind.slug}`}
+                    className="font-medium text-xs text-brand-secondary hover:text-brand-dark transition-colors whitespace-nowrap"
+                  >
+                    {ind.name}
+                  </Link>
+                ))}
               </div>
               <Link to="/about" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">About</Link>
               <Link to="/how-it-works" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">How It Works</Link>
