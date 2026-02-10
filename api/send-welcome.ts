@@ -5,12 +5,16 @@ type WelcomeBody = {
   name: string;
   email: string;
   projectType: string;
+  phone?: string;
+  zipCode?: string;
 };
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL;
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 async function sendEmail(to: string, subject: string, html: string) {
   if (!RESEND_API_KEY || !RESEND_FROM_EMAIL) {
@@ -37,6 +41,26 @@ async function sendEmail(to: string, subject: string, html: string) {
   }
 }
 
+async function sendTelegramMessage(text: string) {
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    throw new Error('Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID');
+  }
+
+  const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text
+    })
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Telegram API failed: ${text}`);
+  }
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -44,25 +68,45 @@ export default async function handler(req: any, res: any) {
 
   try {
     const body = req.body as WelcomeBody;
-    const { leadId, name, email, projectType } = body || {};
+    const { leadId, name, email, projectType, phone, zipCode } = body || {};
 
     if (!leadId || !name || !email || !projectType) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    await sendEmail(
-      email,
-      'Atlas: We received your audit request',
-      `
-      <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a;max-width:560px;margin:0 auto;">
-        <h2 style="margin-bottom:8px;">Request Received</h2>
-        <p>Hi ${name},</p>
-        <p>We received your <strong>${projectType}</strong> audit request and our team is reviewing it now.</p>
-        <p>We will follow up with your audit details shortly.</p>
-        <p style="margin-top:24px;color:#64748b;font-size:13px;">Atlas Construction Consulting</p>
-      </div>
-      `
-    );
+    const jobs: Promise<any>[] = [];
+
+    if (RESEND_API_KEY && RESEND_FROM_EMAIL) {
+      jobs.push(
+        sendEmail(
+          email,
+          'Atlas: We received your audit request',
+          `
+          <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a;max-width:560px;margin:0 auto;">
+            <h2 style="margin-bottom:8px;">Request Received</h2>
+            <p>Hi ${name},</p>
+            <p>We received your <strong>${projectType}</strong> audit request and our team is reviewing it now.</p>
+            <p>We will follow up with your audit details shortly.</p>
+            <p style="margin-top:24px;color:#64748b;font-size:13px;">Atlas Construction Consulting</p>
+          </div>
+          `
+        )
+      );
+    }
+
+    if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
+      const telegramText =
+        `New Atlas Lead\n` +
+        `Name: ${name}\n` +
+        `Phone: ${phone || 'N/A'}\n` +
+        `Email: ${email}\n` +
+        `ZIP: ${zipCode || 'N/A'}\n` +
+        `Project: ${projectType}\n` +
+        `Lead ID: ${leadId}`;
+      jobs.push(sendTelegramMessage(telegramText));
+    }
+
+    await Promise.allSettled(jobs);
 
     if (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY) {
       const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
@@ -76,7 +120,7 @@ export default async function handler(req: any, res: any) {
         .is('welcome_sent_at', null);
     }
 
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ ok: true, notified: jobs.length > 0 });
   } catch (error: any) {
     console.error(error);
     return res.status(500).json({ error: error?.message || 'Failed to send welcome email' });

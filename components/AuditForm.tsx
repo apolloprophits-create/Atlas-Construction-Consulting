@@ -66,7 +66,9 @@ const AuditForm: React.FC<AuditFormProps> = ({
           leadId,
           name: formData.name,
           email: formData.email,
-          projectType: formData.projectType
+          projectType: formData.projectType,
+          phone: formData.phone,
+          zipCode: formData.zipCode
         })
       }).catch((error) => console.error('Welcome email trigger failed:', error));
       
