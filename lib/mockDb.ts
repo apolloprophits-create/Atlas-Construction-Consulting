@@ -90,6 +90,33 @@ const mapPublicAuditRow = (row: PublicAuditRow): AuditRecord => ({
   recommendedActions: row.recommended_actions ?? []
 });
 
+const buildLeadInsertErrorMessage = (error: { code?: string; message?: string } | null): string => {
+  const raw = error?.message ?? '';
+  const lower = raw.toLowerCase();
+
+  if (lower.includes('relation') && lower.includes('leads') && lower.includes('does not exist')) {
+    return 'Supabase table "leads" was not found. Run supabase/schema.sql in your Supabase SQL Editor, then redeploy Vercel.';
+  }
+
+  if (lower.includes('row-level security') || lower.includes('policy')) {
+    return 'Supabase blocked the insert due to RLS policy. Run supabase/schema.sql so anon insert policy for "leads" is created.';
+  }
+
+  if (lower.includes('invalid api key') || lower.includes('jwt') || lower.includes('permission denied')) {
+    return 'Supabase credentials are invalid for this project. Verify VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel.';
+  }
+
+  if (error?.code) {
+    return `Lead submit failed (${error.code}): ${raw || 'Unknown Supabase error.'}`;
+  }
+
+  if (raw) {
+    return `Lead submit failed: ${raw}`;
+  }
+
+  return 'Lead submit failed: no row returned from Supabase. Verify table, RLS policy, and Vercel Supabase env vars.';
+};
+
 export const mockDb = {
   // Leads
   saveLead: async (lead: LeadFormState): Promise<string> => {
@@ -108,7 +135,7 @@ export const mockDb = {
       .single();
 
     if (error || !data?.id) {
-      throw new Error(`Failed to save lead: ${error.message}`);
+      throw new Error(buildLeadInsertErrorMessage(error));
     }
 
     return data.id as string;

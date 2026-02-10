@@ -18,6 +18,7 @@ const AuditForm: React.FC<AuditFormProps> = ({
   embedded = false
 }) => {
   const [status, setStatus] = useState<FormStatus>(FormStatus.IDLE);
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState<LeadFormState>({
     name: '',
     phone: '',
@@ -39,9 +40,23 @@ const AuditForm: React.FC<AuditFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus(FormStatus.SUBMITTING);
+    setSubmitError('');
     
     try {
-      const leadId = await mockDb.saveLead(formData);
+      const leadId = await Promise.race<string>([
+        mockDb.saveLead(formData),
+        new Promise<string>((_, reject) =>
+          setTimeout(
+            () =>
+              reject(
+                new Error(
+                  'Request timed out while saving to Supabase. Check Vercel env vars and Supabase table/policies.'
+                )
+              ),
+            15000
+          )
+        )
+      ]);
 
       // Fire-and-forget welcome email chain start (handled server-side).
       fetch('/api/send-welcome', {
@@ -70,6 +85,8 @@ const AuditForm: React.FC<AuditFormProps> = ({
       setStatus(FormStatus.SUCCESS);
     } catch (error) {
       console.error(error);
+      const message = error instanceof Error ? error.message : 'We could not submit your request right now.';
+      setSubmitError(message);
       setStatus(FormStatus.ERROR);
     }
   };
@@ -247,7 +264,7 @@ const AuditForm: React.FC<AuditFormProps> = ({
           </Button>
           {status === FormStatus.ERROR && (
             <p className="text-sm text-red-600 text-center mt-3">
-              We could not submit your request right now. Please try again in a moment.
+              {submitError || 'We could not submit your request right now. Please try again in a moment.'}
             </p>
           )}
           <p className="text-xs text-center text-slate-400 mt-3 flex items-center justify-center gap-1">
