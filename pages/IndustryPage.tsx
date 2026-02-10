@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, Navigate, Link, useLocation } from 'react-router-dom';
 import { INDUSTRIES, ICON_MAP } from '../constants';
 import Button from '../components/ui/Button';
 import FAQList from '../components/FAQList';
@@ -7,12 +7,15 @@ import { AlertTriangle, CheckSquare, Search, FileBarChart } from 'lucide-react';
 
 const IndustryPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const location = useLocation();
 
-  const industry = slug ? INDUSTRIES[slug] : null;
+  const pathnameSlug = location.pathname.replace(/^\/+/, '').split('/')[0];
+  const resolvedSlug = slug || pathnameSlug;
+  const industry = resolvedSlug ? INDUSTRIES[resolvedSlug] : null;
   const isHvacPage = industry?.slug === 'hvac';
   const pageTitle = `${industry?.name} Permit Intelligence in Phoenix | Atlas Construction Intelligence`;
   const pageDescription = `Atlas helps Phoenix property owners understand ${industry?.name} permits and coordinate options when projects delay or stall.`;
-  const canonicalPath = slug ? `/${slug}` : '/';
+  const canonicalPath = resolvedSlug ? `/${resolvedSlug}` : '/';
   const ctaText = isHvacPage ? 'Start HVAC Recovery' : `Start ${industry?.name} Audit`;
   const aiIntro = `Atlas Construction Intelligence provides ${industry?.name} permit intelligence in Phoenix, Arizona. We help property owners identify risks and delays after ${industry?.name} permits are issued, with coordination support when projects stall.`;
   const aiFaqs = [
