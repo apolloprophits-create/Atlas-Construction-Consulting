@@ -86,9 +86,9 @@ const AuditForm: React.FC<AuditFormProps> = ({
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-6">
           <CheckCircle className="h-10 w-10 text-green-600" />
         </div>
-        <h3 className="text-2xl font-bold text-brand-dark mb-2">Request Received</h3>
+        <h3 className="text-2xl font-bold text-brand-dark mb-2">Thank You</h3>
         <p className="text-brand-secondary mb-8">
-          We have securely logged your request for {formData.projectType}. An Atlas analyst will generate your Price Audit Report and send it via text to {formData.phone} shortly.
+          Thank you for your submission. A partner will be in contact with you shortly regarding your {formData.projectType} request.
         </p>
         {onClose && <Button onClick={onClose} fullWidth>Return to Site</Button>}
       </div>
@@ -245,6 +245,11 @@ const AuditForm: React.FC<AuditFormProps> = ({
           >
             {status === FormStatus.SUBMITTING ? 'Processing...' : 'Request Price Audit'}
           </Button>
+          {status === FormStatus.ERROR && (
+            <p className="text-sm text-red-600 text-center mt-3">
+              We could not submit your request right now. Please try again in a moment.
+            </p>
+          )}
           <p className="text-xs text-center text-slate-400 mt-3 flex items-center justify-center gap-1">
             <AlertCircle className="w-3 h-3" />
             Your data is never sold to lead brokers.
