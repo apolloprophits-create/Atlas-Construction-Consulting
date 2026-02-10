@@ -120,9 +120,15 @@ const buildLeadInsertErrorMessage = (error: { code?: string; message?: string } 
 export const mockDb = {
   // Leads
   saveLead: async (lead: LeadFormState): Promise<string> => {
-    const { data, error } = await supabase
+    const leadId =
+      typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID()
+        : `lead-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+    const { error } = await supabase
       .from('leads')
       .insert({
+      id: leadId,
       name: lead.name,
       phone: lead.phone,
       email: lead.email,
@@ -130,15 +136,13 @@ export const mockDb = {
       project_type: lead.projectType,
       contractor_name: lead.contractorName ?? null,
       notes: lead.notes ?? null
-      })
-      .select('id')
-      .single();
+      });
 
-    if (error || !data?.id) {
+    if (error) {
       throw new Error(buildLeadInsertErrorMessage(error));
     }
 
-    return data.id as string;
+    return leadId;
   },
 
   getLeads: async (): Promise<any[]> => {
