@@ -8,9 +8,9 @@ import { ArrowRight, BarChart3, Lock, Search } from 'lucide-react';
 
 const Home: React.FC = () => {
   useEffect(() => {
-    document.title = "Construction Price Audits for Phoenix Homeowners | Atlas Construction Consulting";
+    document.title = "Permit Intelligence for Phoenix Property Owners | Atlas Construction Intelligence";
     const metaDescription = document.querySelector('meta[name="description"]');
-    const descContent = "Atlas Construction Consulting provides independent construction price audits using real-time permit data to help Phoenix homeowners avoid overpaying.";
+    const descContent = "Atlas Construction Intelligence helps Phoenix property owners monitor permits, identify risks, and coordinate next steps when projects stall. Atlas is not a contractor.";
     if (metaDescription) {
       metaDescription.setAttribute('content', descContent);
     } else {
@@ -36,7 +36,7 @@ const Home: React.FC = () => {
               <span className="text-brand-accent">Absolute Price Transparency.</span>
             </h1>
             <p className="text-lg md:text-xl text-brand-secondary mb-10 leading-relaxed max-w-2xl">
-              Atlas Construction Consulting uses proprietary data analytics to ensure Phoenix homeowners never overpay for major home investments. We are your independent advocate in an opaque market.
+              Atlas Construction Intelligence is an independent permit intelligence and coordination firm for Phoenix-area property owners. We monitor public permits, flag risk or delay signals, and provide clear coordination support when projects stall. We are not a contractor.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/request-audit">

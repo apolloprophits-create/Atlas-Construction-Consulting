@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { INDUSTRIES, ICON_MAP } from '../constants';
 import Button from '../components/ui/Button';
-import ExplainerSection from '../components/ExplainerSection';
 import FAQList from '../components/FAQList';
 import { AlertTriangle, CheckSquare, Search, FileBarChart } from 'lucide-react';
 
@@ -11,14 +10,33 @@ const IndustryPage: React.FC = () => {
 
   const industry = slug ? INDUSTRIES[slug] : null;
   const isHvacPage = industry?.slug === 'hvac';
-  const pageTitle = isHvacPage
-    ? 'HVAC Price Recovery & Market Intelligence | Phoenix, AZ | Atlas'
-    : `${industry?.name} Cost Verification & Intelligence | Phoenix, AZ | Atlas`;
-  const pageDescription = isHvacPage
-    ? 'Phoenix HVAC price intelligence with verified market floor rates for 3-ton to 5-ton systems. Independent recovery-focused valuation insights for homeowners.'
-    : `${industry?.name} cost verification and market intelligence for Phoenix-area homeowners. Independent permit-backed pricing analysis across Phoenix, Scottsdale, and Mesa.`;
+  const pageTitle = `${industry?.name} Permit Intelligence in Phoenix | Atlas Construction Intelligence`;
+  const pageDescription = `Atlas helps Phoenix property owners understand ${industry?.name} permits and coordinate options when projects delay or stall.`;
   const canonicalPath = slug ? `/${slug}` : '/';
   const ctaText = isHvacPage ? 'Start HVAC Recovery' : `Start ${industry?.name} Audit`;
+  const aiIntro = `Atlas Construction Intelligence provides ${industry?.name} permit intelligence in Phoenix, Arizona. We help property owners identify risks and delays after ${industry?.name} permits are issued, with coordination support when projects stall.`;
+  const aiFaqs = [
+    {
+      question: 'What is permit intelligence?',
+      answer: `Permit intelligence means tracking public ${industry?.name} permit activity and using that data to spot risk, timing issues, and pricing concerns before decisions are final.`
+    },
+    {
+      question: 'Is Atlas a contractor?',
+      answer: 'No. Atlas Construction Intelligence is an independent intelligence and coordination firm, not a licensed construction contractor.'
+    },
+    {
+      question: `Why do ${industry?.name} permits matter?`,
+      answer: `Permits provide objective signals about project timing, scope, and declared valuation. That context helps owners verify what is happening and what options to evaluate next.`
+    },
+    {
+      question: 'When should I contact Atlas?',
+      answer: 'Contact Atlas after a permit is filed, when progress slows, or when you need independent coordination and clarity before committing to the next step.'
+    },
+    {
+      question: 'Do you perform the construction work?',
+      answer: 'No. Atlas does not perform field work. We provide independent intelligence and optional coordination support.'
+    }
+  ];
 
   useEffect(() => {
     if (industry) {
@@ -81,8 +99,11 @@ const IndustryPage: React.FC = () => {
                   Verified Market Floor Rates for 3-Ton to 5-Ton Systems.
                 </h2>
               )}
-              <p className="text-slate-300 text-lg md:text-xl leading-relaxed mb-8 max-w-2xl">
+              <p className="text-slate-300 text-lg md:text-xl leading-relaxed mb-4 max-w-2xl">
                 {industry.heroSubheadline}
+              </p>
+              <p className="text-slate-200 leading-relaxed mb-8 max-w-2xl">
+                {aiIntro}
               </p>
               <Link to="/request-audit">
                 <Button as="span" variant="secondary" size="lg">
@@ -112,16 +133,16 @@ const IndustryPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Why Overpriced */}
+      {/* What We Monitor */}
       <section className="py-16 bg-white border-b border-brand-border">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 text-red-800 text-xs font-bold uppercase tracking-wider mb-6">
-             <AlertTriangle className="w-4 h-4" />
-             Market Analysis
+             <FileBarChart className="w-4 h-4" />
+             Permit Monitoring
            </div>
-           <h2 className="text-2xl font-bold text-brand-dark mb-6">Why is {industry.name} often overpriced?</h2>
+           <h2 className="text-2xl font-bold text-brand-dark mb-6">What We Monitor</h2>
            <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
-             {industry.overpricedAnalysis.map((item, idx) => (
+             {industry.auditPoints.map((item, idx) => (
                <li key={idx} className="bg-slate-50 p-5 rounded-lg border border-slate-100 flex flex-col gap-3">
                  <div className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm">
                    {idx + 1}
@@ -135,56 +156,36 @@ const IndustryPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Explainer Section */}
-      <ExplainerSection />
-
-      {/* Split: What We Audit vs Red Flags */}
+      {/* Why Permits Matter */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Audit Points */}
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-brand-border h-full">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-blue-100 p-2 rounded-lg text-blue-700">
-                  <FileBarChart className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-brand-dark">What Atlas Audits</h3>
+          <div className="bg-white p-8 rounded-xl shadow-sm border border-brand-border">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="bg-red-100 p-2 rounded-lg text-red-700">
+                <AlertTriangle className="w-6 h-6" />
               </div>
-              <ul className="space-y-4">
-                {industry.auditPoints.map((point, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <CheckSquare className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-brand-secondary">{point}</span>
-                  </li>
-                ))}
-              </ul>
+              <h2 className="text-2xl font-bold text-brand-dark">Why Permits Matter in {industry.name}</h2>
             </div>
-
-            {/* Red Flags */}
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-brand-border h-full">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-red-100 p-2 rounded-lg text-red-700">
-                  <AlertTriangle className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-brand-dark">Common Red Flags</h3>
-              </div>
-              <ul className="space-y-4">
-                {industry.redFlags.map((flag, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-red-50 text-red-500 flex items-center justify-center font-bold text-xs mt-0.5 flex-shrink-0">!</div>
-                    <span className="text-brand-secondary">{flag}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {industry.overpricedAnalysis.map((item, idx) => (
+                <li key={idx} className="bg-slate-50 p-5 rounded-lg border border-slate-100 flex flex-col gap-3">
+                  <div className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm">
+                    {idx + 1}
+                  </div>
+                  <p className="text-brand-secondary font-medium leading-snug">
+                    {item}
+                  </p>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* How it Works (Stealth Process) */}
+      {/* How Atlas Helps */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-brand-dark text-center mb-12">How the Atlas Audit Works</h2>
+          <h2 className="text-2xl font-bold text-brand-dark text-center mb-12">How Atlas Helps</h2>
           <div className="relative border-l-2 border-slate-200 ml-4 md:ml-0 space-y-12 md:space-y-0">
             {industry.processSteps.map((step, idx) => (
               <div key={idx} className="relative pl-8 md:pl-0">
@@ -208,10 +209,30 @@ const IndustryPage: React.FC = () => {
         </div>
       </section>
 
+      {/* When to Contact Atlas */}
+      <section className="py-16 bg-slate-50 border-y border-brand-border">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-brand-dark mb-6 text-center">When to Contact Atlas</h2>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              `A ${industry.name} permit was recently filed and you want independent clarity.`,
+              'Project progress has slowed or communication is inconsistent.',
+              'You need neutral coordination support before final commitments.',
+              'You want permit-based context before deciding next steps.'
+            ].map((item, idx) => (
+              <li key={idx} className="bg-white p-4 rounded-lg border border-slate-200 flex items-start gap-2">
+                <CheckSquare className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-brand-secondary">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* FAQ Section (Component) */}
       <FAQList 
-        title={`Frequently Asked Questions About ${industry.name} Pricing`} 
-        items={industry.faqs} 
+        title={`Frequently Asked Questions: ${industry.name} Permit Intelligence`} 
+        items={aiFaqs} 
         className="bg-slate-50 border-t border-brand-border" 
       />
 
