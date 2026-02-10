@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { mockDb } from '../lib/mockDb';
 import Button from '../components/ui/Button';
-import { Link } from 'react-router-dom';
 import { Copy, Check, Lock, Inbox, User, ArrowRight } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import type { Session } from '@supabase/supabase-js';
 
 const InternalCreateAudit: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [authLoading, setAuthLoading] = useState(true);
+  const [authError, setAuthError] = useState('');
   const [leads, setLeads] = useState<any[]>([]);
   
   const [formData, setFormData] = useState({
@@ -26,22 +30,52 @@ const InternalCreateAudit: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      const dbLeads = mockDb.getLeads();
-      // Sort by newest first
-      const sortedLeads = dbLeads.sort((a: any, b: any) => 
-        new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
-      );
-      setLeads(sortedLeads);
-    }
-  }, [isAuthenticated]);
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      setAuthLoading(false);
+    });
 
-  const handleAuth = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password === 'atlas2024') {
-      setIsAuthenticated(true);
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+      setAuthLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (session) {
+      mockDb
+        .getLeads()
+        .then((dbLeads) => setLeads(dbLeads))
+        .catch((error) => {
+          console.error(error);
+          setLeads([]);
+        });
     } else {
-      alert('Invalid Password');
+      setLeads([]);
+    }
+  }, [session]);
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError('');
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      setAuthError(error.message);
+    }
+  };
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error(error);
     }
   };
 
@@ -130,7 +164,15 @@ const InternalCreateAudit: React.FC = () => {
     }
   };
 
-  if (!isAuthenticated) {
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-100">
+        <div className="text-brand-secondary">Checking session...</div>
+      </div>
+    );
+  }
+
+  if (!session) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-100">
         <div className="bg-white p-8 rounded-xl shadow-md max-w-sm w-full">
@@ -141,18 +183,28 @@ const InternalCreateAudit: React.FC = () => {
            </div>
            <h2 className="text-center text-xl font-bold text-brand-dark mb-6">Internal Access Only</h2>
            <form onSubmit={handleAuth} className="space-y-4">
+             <input
+               type="email"
+               className="w-full p-3 border rounded-lg"
+               placeholder="Analyst email"
+               value={email}
+               onChange={(e) => setEmail(e.target.value)}
+               autoComplete="email"
+               required
+             />
              <input 
                type="password" 
                className="w-full p-3 border rounded-lg" 
-               placeholder="Enter password"
+               placeholder="Password"
                value={password}
                onChange={(e) => setPassword(e.target.value)}
+               autoComplete="current-password"
+               required
              />
-             <Button fullWidth type="submit">Unlock</Button>
+             <Button fullWidth type="submit">Sign In</Button>
            </form>
-           <div className="text-center mt-4 text-xs text-slate-400">
-             (Use 'atlas2024')
-           </div>
+           {authError && <div className="mt-3 text-sm text-red-600 text-center">{authError}</div>}
+           <div className="text-center mt-4 text-xs text-slate-400">Use your Supabase Auth analyst account</div>
         </div>
       </div>
     );
@@ -162,9 +214,14 @@ const InternalCreateAudit: React.FC = () => {
     <div className="max-w-7xl mx-auto py-12 px-4">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-brand-dark">Analyst Dashboard</h1>
-        <div className="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-green-600 animate-pulse"></div>
-          AUTHORIZED SESSION
+        <div className="flex items-center gap-3">
+          <div className="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-green-600 animate-pulse"></div>
+            AUTHORIZED SESSION
+          </div>
+          <Button size="sm" variant="outline" onClick={handleSignOut}>
+            Sign Out
+          </Button>
         </div>
       </div>
       
@@ -300,7 +357,7 @@ const InternalCreateAudit: React.FC = () => {
                     </h3>
                     <div className="flex gap-2">
                       <input readOnly value={createdLink} className="flex-1 p-3 text-sm border rounded-lg text-slate-600 bg-white" />
-                      <button onClick={copyToClipboard} className="p-3 bg-white border rounded-lg hover:bg-slate-50 text-slate-600">
+                      <button type="button" onClick={copyToClipboard} className="p-3 bg-white border rounded-lg hover:bg-slate-50 text-slate-600">
                         {copied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5" />}
                       </button>
                     </div>
@@ -319,6 +376,7 @@ const InternalCreateAudit: React.FC = () => {
                     <div className="bg-white p-4 rounded-lg border border-slate-300 text-sm text-slate-700 font-mono leading-relaxed relative group">
                       Hi — this is Atlas Construction Consulting. A residential permit was recently issued associated with your project area. We ran an independent pricing audit against current Maricopa County market data. Review your Atlas Audit Report here: {createdLink}
                       <button 
+                          type="button"
                           className="absolute top-2 right-2 p-1 text-slate-400 hover:text-brand-accent opacity-0 group-hover:opacity-100 transition-opacity"
                           onClick={() => navigator.clipboard.writeText(`Hi — this is Atlas Construction Consulting. A residential permit was recently issued associated with your project area. We ran an independent pricing audit against current Maricopa County market data. Review your Atlas Audit Report here: ${createdLink}`)}
                       >
@@ -332,6 +390,7 @@ const InternalCreateAudit: React.FC = () => {
                     <div className="bg-white p-4 rounded-lg border border-slate-300 text-sm text-slate-700 font-mono leading-relaxed relative group">
                       This report is informational only and not a sales offer. Many homeowners review it before finalizing contracts. {createdLink}
                       <button 
+                          type="button"
                           className="absolute top-2 right-2 p-1 text-slate-400 hover:text-brand-accent opacity-0 group-hover:opacity-100 transition-opacity"
                           onClick={() => navigator.clipboard.writeText(`This report is informational only and not a sales offer. Many homeowners review it before finalizing contracts. ${createdLink}`)}
                       >

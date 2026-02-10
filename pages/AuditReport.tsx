@@ -210,7 +210,7 @@ const AuditReport: React.FC = () => {
                Proceed with Confidence
              </Button>
              <Link to="/contact">
-                <Button fullWidth variant="outline">
+                <Button as="span" fullWidth variant="outline">
                   Request a Second Look
                 </Button>
              </Link>

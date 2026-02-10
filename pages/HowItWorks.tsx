@@ -65,8 +65,8 @@ const HowItWorks: React.FC = () => {
 
           <div className="mt-24 text-center">
              <h3 className="text-2xl font-bold text-brand-dark mb-6">Ready to verify your quote?</h3>
-             <Link to="/">
-               <Button size="lg">Start Your Audit</Button>
+             <Link to="/request-audit">
+               <Button as="span" size="lg">Start Your Audit</Button>
              </Link>
           </div>
         </div>

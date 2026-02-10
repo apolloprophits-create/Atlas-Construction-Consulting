@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { INDUSTRIES, STEPS, ICON_MAP, GLOBAL_FAQS } from '../constants';
 import Button from '../components/ui/Button';
-import AuditForm from '../components/AuditForm';
 import ExplainerSection from '../components/ExplainerSection';
 import FAQList from '../components/FAQList';
 import { ArrowRight, BarChart3, Lock, Search } from 'lucide-react';
 
 const Home: React.FC = () => {
-  const [isAuditOpen, setIsAuditOpen] = useState(false);
-
   useEffect(() => {
     document.title = "Construction Price Audits for Phoenix Homeowners | Atlas Construction Consulting";
     const metaDescription = document.querySelector('meta[name="description"]');
@@ -42,11 +39,11 @@ const Home: React.FC = () => {
               Atlas Construction Consulting uses proprietary data analytics to ensure Phoenix homeowners never overpay for major home investments. We are your independent advocate in an opaque market.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" onClick={() => setIsAuditOpen(true)}>
-                Request a Price Audit
-              </Button>
+              <Link to="/request-audit">
+                <Button as="span" size="lg">Request a Price Audit</Button>
+              </Link>
               <Link to="/how-it-works">
-                <Button variant="outline" size="lg">
+                <Button as="span" variant="outline" size="lg">
                   How Atlas Works
                 </Button>
               </Link>
@@ -216,7 +213,7 @@ const Home: React.FC = () => {
                </div>
                <div className="mt-10">
                  <Link to="/how-it-works">
-                   <Button variant="outline">Detailed Methodology</Button>
+                   <Button as="span" variant="outline">Detailed Methodology</Button>
                  </Link>
                </div>
              </div>
@@ -263,24 +260,21 @@ const Home: React.FC = () => {
           <p className="text-blue-100 text-lg mb-10 max-w-2xl mx-auto">
             Get an independent price audit before you sign the contract. It's free to request and could save you thousands.
           </p>
-          <Button 
-            size="lg" 
-            variant="primary" 
-            className="bg-white text-brand-accent hover:bg-slate-100"
-            onClick={() => setIsAuditOpen(true)}
-          >
-            Request a Price Audit
-          </Button>
+          <Link to="/request-audit">
+            <Button
+              as="span"
+              size="lg"
+              variant="primary"
+              className="bg-white text-brand-accent hover:bg-slate-100"
+            >
+              Request a Price Audit
+            </Button>
+          </Link>
           <p className="mt-4 text-sm text-blue-200 opacity-80">
             No obligation. No lead selling.
           </p>
         </div>
       </section>
-
-      <AuditForm 
-        isOpen={isAuditOpen} 
-        onClose={() => setIsAuditOpen(false)} 
-      />
     </>
   );
 };

@@ -184,8 +184,8 @@ const WhatIsAudit: React.FC = () => {
           <p className="text-lg text-slate-700 leading-relaxed mb-6">
             Homeowners can request an independent construction price audit by submitting basic project details. If sufficient data is available, an Atlas Audit Report is generated and delivered for review.
           </p>
-          <Link to="/#request-audit-form">
-            <Button size="lg">Request an Audit</Button>
+          <Link to="/request-audit">
+            <Button as="span" size="lg">Request an Audit</Button>
           </Link>
         </div>
 

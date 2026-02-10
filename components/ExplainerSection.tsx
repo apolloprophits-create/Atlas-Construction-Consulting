@@ -49,8 +49,8 @@ const ExplainerSection: React.FC = () => {
         </div>
 
         <div className="text-center">
-          <Link to="/#request-audit-form">
-            <Button size="lg">Request a Price Audit</Button>
+          <Link to="/request-audit">
+            <Button as="span" size="lg">Request a Price Audit</Button>
           </Link>
           <p className="text-xs text-slate-400 mt-4">
             Independent. Confidential. Data-Backed.

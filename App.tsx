@@ -11,6 +11,8 @@ import Contact from './pages/Contact';
 import InternalCreateAudit from './pages/InternalCreateAudit';
 import AuditReport from './pages/AuditReport';
 import WhatIsAudit from './pages/WhatIsAudit';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -31,15 +33,15 @@ const App: React.FC = () => {
         <Route path="/how-it-works" element={<Layout><HowItWorks /></Layout>} />
         <Route path="/what-is-a-construction-price-audit" element={<Layout><WhatIsAudit /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
+        <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
+        <Route path="/terms-of-service" element={<Layout><TermsOfService /></Layout>} />
         <Route path="/request-audit" element={<Layout><RequestAudit /></Layout>} />
         <Route path="/industries" element={<Layout><IndustriesIndex /></Layout>} />
         <Route path="/industries/:slug" element={<Layout><IndustryPage /></Layout>} />
         
         {/* Private / Internal Routes */}
         <Route path="/audit/:secureId" element={<AuditReport />} />
-        {/* Internal Tool with Public Layout for easy navigation access */}
         <Route path="/internal/create-audit" element={<Layout><InternalCreateAudit /></Layout>} />
-
         {/* Fallback */}
         <Route path="*" element={<Layout><Home /></Layout>} />
       </Routes>

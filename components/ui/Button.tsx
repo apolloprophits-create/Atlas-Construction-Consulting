@@ -4,6 +4,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
+  as?: 'button' | 'span';
 }
 
 const Button: React.FC<ButtonProps> = ({ 
@@ -11,9 +12,11 @@ const Button: React.FC<ButtonProps> = ({
   variant = 'primary', 
   size = 'md', 
   fullWidth = false,
+  as = 'button',
   className = '',
   ...props 
 }) => {
+  const buttonType = props.type ?? 'button';
   const baseStyles = 'inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variants = {
@@ -31,8 +34,17 @@ const Button: React.FC<ButtonProps> = ({
 
   const widthStyle = fullWidth ? 'w-full' : '';
 
+  if (as === 'span') {
+    return (
+      <span className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${widthStyle} ${className}`}>
+        {children}
+      </span>
+    );
+  }
+
   return (
     <button 
+      type={buttonType}
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${widthStyle} ${className}`}
       {...props}
     >

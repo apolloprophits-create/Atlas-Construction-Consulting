@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useParams, Navigate, Link } from 'react-router-dom';
 import { INDUSTRIES, ICON_MAP } from '../constants';
 import Button from '../components/ui/Button';
-import AuditForm from '../components/AuditForm';
 import ExplainerSection from '../components/ExplainerSection';
 import FAQList from '../components/FAQList';
 import { AlertTriangle, CheckSquare, Search, FileBarChart } from 'lucide-react';
 
 const IndustryPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [isAuditOpen, setIsAuditOpen] = useState(false);
 
   const industry = slug ? INDUSTRIES[slug] : null;
 
@@ -59,13 +57,11 @@ const IndustryPage: React.FC = () => {
               <p className="text-slate-300 text-lg md:text-xl leading-relaxed mb-8 max-w-2xl">
                 {industry.heroSubheadline}
               </p>
-              <Button 
-                variant="secondary" 
-                size="lg"
-                onClick={() => setIsAuditOpen(true)}
-              >
-                {industry.ctaButtonText}
-              </Button>
+              <Link to="/request-audit">
+                <Button as="span" variant="secondary" size="lg">
+                  {industry.ctaButtonText}
+                </Button>
+              </Link>
             </div>
             {/* Visual Abstract for Industry */}
             <div className="hidden md:flex justify-center items-center w-full max-w-xs">
@@ -199,17 +195,13 @@ const IndustryPage: React.FC = () => {
            <p className="text-slate-400 mb-8">
              Upload your {industry.name} proposal for a free, confidential review.
            </p>
-           <Button variant="secondary" size="lg" onClick={() => setIsAuditOpen(true)}>
-             {industry.ctaButtonText}
-           </Button>
+           <Link to="/request-audit">
+             <Button as="span" variant="secondary" size="lg">
+               {industry.ctaButtonText}
+             </Button>
+           </Link>
         </div>
       </section>
-
-      <AuditForm 
-        isOpen={isAuditOpen} 
-        onClose={() => setIsAuditOpen(false)} 
-        initialIndustry={industry.name}
-      />
     </>
   );
 };

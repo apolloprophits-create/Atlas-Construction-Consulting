@@ -41,7 +41,19 @@ const AuditForm: React.FC<AuditFormProps> = ({
     setStatus(FormStatus.SUBMITTING);
     
     try {
-      await mockDb.saveLead(formData);
+      const leadId = await mockDb.saveLead(formData);
+
+      // Fire-and-forget welcome email chain start (handled server-side).
+      fetch('/api/send-welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          leadId,
+          name: formData.name,
+          email: formData.email,
+          projectType: formData.projectType
+        })
+      }).catch((error) => console.error('Welcome email trigger failed:', error));
       
       // Analytics Placeholder
       if (typeof window !== 'undefined') {
@@ -95,6 +107,7 @@ const AuditForm: React.FC<AuditFormProps> = ({
     <div className={`bg-white rounded-xl ${!embedded ? 'shadow-2xl max-w-lg relative my-8' : 'border border-brand-border'} w-full animate-in fade-in slide-in-from-bottom-8 duration-300`}>
       {!embedded && onClose && (
         <button 
+          type="button"
           onClick={onClose}
           className="absolute top-4 right-4 text-brand-secondary hover:text-brand-dark transition-colors"
         >

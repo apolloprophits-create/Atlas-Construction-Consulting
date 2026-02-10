@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, ShieldCheck } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { INDUSTRIES } from '../constants';
 import Button from './ui/Button';
-import AuditForm from './AuditForm';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(false);
   const location = useLocation();
 
@@ -49,21 +47,19 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <nav 
         className={`fixed w-full z-40 transition-all duration-300 border-b ${
           isScrolled 
-            ? 'bg-white/95 backdrop-blur-md border-brand-border py-3 shadow-sm' 
-            : 'bg-white border-transparent py-5'
+            ? 'bg-white/95 backdrop-blur-md border-brand-border py-2 md:py-3 shadow-sm' 
+            : 'bg-white border-transparent py-3 md:py-5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="bg-brand-dark p-1.5 rounded-lg group-hover:bg-brand-accent transition-colors">
-                <ShieldCheck className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold leading-none tracking-tight text-brand-dark">ATLAS</span>
-                <span className="text-[10px] font-semibold tracking-widest text-brand-secondary uppercase">Construction Consulting</span>
-              </div>
+            <Link to="/" className="flex items-center gap-3 group">
+              <img
+                src="/images/atlas-logo.png"
+                alt="Atlas Construction Consulting logo"
+                className="h-24 sm:h-28 md:h-32 lg:h-40 w-auto object-contain"
+              />
             </Link>
 
             {/* Desktop Nav */}
@@ -73,7 +69,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 onMouseEnter={() => setActiveDropdown(true)}
                 onMouseLeave={() => setActiveDropdown(false)}
               >
-                <button className="flex items-center gap-1 font-medium text-sm text-brand-secondary hover:text-brand-dark py-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveDropdown((prev) => !prev)}
+                  className="flex items-center gap-1 font-medium text-sm text-brand-secondary hover:text-brand-dark py-2"
+                >
                   Industries <ChevronDown className="w-4 h-4" />
                 </button>
                 {/* Mega Menu / Dropdown */}
@@ -100,17 +100,16 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </div>
               <Link to="/about" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">About</Link>
               <Link to="/how-it-works" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">How It Works</Link>
-              <Button 
-                variant="primary" 
-                size="sm" 
-                onClick={() => setIsAuditModalOpen(true)}
-              >
-                Request Price Audit
-              </Button>
+              <Link to="/request-audit">
+                <Button as="span" variant="primary" size="sm">
+                  Request Price Audit
+                </Button>
+              </Link>
             </div>
 
             {/* Mobile Toggle */}
             <button 
+              type="button"
               className="md:hidden text-brand-dark"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
@@ -137,14 +136,16 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
              <div className="border-t border-brand-border pt-4 flex flex-col gap-4">
                 <Link to="/about" className="text-base font-medium text-brand-dark">About</Link>
                 <Link to="/how-it-works" className="text-base font-medium text-brand-dark">How It Works</Link>
-                <Button fullWidth onClick={() => setIsAuditModalOpen(true)}>Request Audit</Button>
+                <Link to="/request-audit" className="block">
+                  <Button as="span" fullWidth>Request Audit</Button>
+                </Link>
              </div>
           </div>
         )}
       </nav>
 
       {/* Main Content */}
-      <main className="flex-grow pt-[80px]">
+      <main className="flex-grow pt-[130px] sm:pt-[150px] md:pt-[180px] lg:pt-[210px]">
         {children}
       </main>
 
@@ -153,10 +154,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                <ShieldCheck className="w-8 h-8 text-brand-accent" />
-                <span className="text-2xl font-bold tracking-tight">ATLAS</span>
-              </div>
+              <div className="text-2xl font-bold tracking-tight mb-4">ATLAS</div>
               <p className="text-slate-400 max-w-sm leading-relaxed">
                 Construction Intelligence. Price Advocacy. Market Transparency.
                 <br />
@@ -177,25 +175,19 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <li><Link to="/about" className="hover:text-white transition-colors">About Atlas</Link></li>
                 <li><Link to="/how-it-works" className="hover:text-white transition-colors">Our Process</Link></li>
                 <li><Link to="/what-is-a-construction-price-audit" className="hover:text-white transition-colors">What is a Price Audit?</Link></li>
-                <li><button onClick={() => setIsAuditModalOpen(true)} className="hover:text-white transition-colors">Request Audit</button></li>
+                <li><Link to="/request-audit" className="hover:text-white transition-colors">Request Audit</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
             <p>&copy; {new Date().getFullYear()} Atlas Construction Consulting. All rights reserved.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
-              <span>Privacy Policy</span>
-              <span>Terms of Service</span>
+              <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <Link to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
             </div>
           </div>
         </div>
       </footer>
-
-      {/* Global Audit Modal */}
-      <AuditForm 
-        isOpen={isAuditModalOpen} 
-        onClose={() => setIsAuditModalOpen(false)} 
-      />
     </div>
   );
 };

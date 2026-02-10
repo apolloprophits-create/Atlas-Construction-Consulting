@@ -1,6 +1,7 @@
 import React from 'react';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin } from 'lucide-react';
 import Button from '../components/ui/Button';
+import { Link } from 'react-router-dom';
 
 const Contact: React.FC = () => {
   return (
@@ -44,7 +45,9 @@ const Contact: React.FC = () => {
               <p className="text-sm text-brand-secondary mb-6">
                 If you have a contractor waiting for a signature, use our priority request form.
               </p>
-              <Button fullWidth onClick={() => window.location.href='/#/request-audit'}>Request Priority Audit</Button>
+              <Link to="/request-audit" className="block">
+                <Button as="span" fullWidth>Request Priority Audit</Button>
+              </Link>
            </div>
         </div>
       </div>
