@@ -67,8 +67,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {Object.values(INDUSTRIES).map((ind) => (
                   <Link
                     key={ind.slug}
-                    to={`/${ind.slug}`}
-                    className="font-medium text-xs text-brand-secondary hover:text-brand-dark transition-colors whitespace-nowrap"
+                    to={`/industries/${ind.slug}`}
+                    className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors whitespace-nowrap"
                   >
                     {ind.name}
                   </Link>
@@ -102,7 +102,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {Object.values(INDUSTRIES).map((ind) => (
                   <Link 
                     key={ind.slug} 
-                    to={`/${ind.slug}`}
+                    to={`/industries/${ind.slug}`}
                     className="text-sm font-medium text-brand-dark py-2 px-3 bg-slate-50 rounded-md"
                   >
                     {ind.name}
@@ -141,7 +141,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <h4 className="font-bold text-lg mb-4">Industries</h4>
               <ul className="space-y-2 text-slate-400">
                 {Object.values(INDUSTRIES).slice(0, 5).map(ind => (
-                  <li key={ind.slug}><Link to={`/${ind.slug}`} className="hover:text-white transition-colors">{ind.name}</Link></li>
+                  <li key={ind.slug}><Link to={`/industries/${ind.slug}`} className="hover:text-white transition-colors">{ind.name}</Link></li>
                 ))}
               </ul>
             </div>
