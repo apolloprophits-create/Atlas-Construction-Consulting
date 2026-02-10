@@ -4,5 +4,26 @@
       "path": "/api/send-followups",
       "schedule": "0 15 * * *"
     }
+  ],
+  "rewrites": [
+    { "source": "/about", "destination": "/" },
+    { "source": "/how-it-works", "destination": "/" },
+    { "source": "/what-is-a-construction-price-audit", "destination": "/" },
+    { "source": "/contact", "destination": "/" },
+    { "source": "/privacy-policy", "destination": "/" },
+    { "source": "/terms-of-service", "destination": "/" },
+    { "source": "/request-audit", "destination": "/" },
+    { "source": "/industries", "destination": "/" },
+    { "source": "/industries/:slug", "destination": "/" },
+    { "source": "/hvac", "destination": "/" },
+    { "source": "/solar", "destination": "/" },
+    { "source": "/pools", "destination": "/" },
+    { "source": "/roofing", "destination": "/" },
+    { "source": "/electrical", "destination": "/" },
+    { "source": "/plumbing", "destination": "/" },
+    { "source": "/additions-remodels", "destination": "/" },
+    { "source": "/concrete-flatwork", "destination": "/" },
+    { "source": "/audit/:secureId", "destination": "/" },
+    { "source": "/internal/create-audit", "destination": "/" }
   ]
 }

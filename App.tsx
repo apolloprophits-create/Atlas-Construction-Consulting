@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -13,6 +13,7 @@ import AuditReport from './pages/AuditReport';
 import WhatIsAudit from './pages/WhatIsAudit';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import { INDUSTRIES } from './constants';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -20,6 +21,14 @@ const ScrollToTop = () => {
     window.scrollTo(0, 0);
   }, [pathname]);
   return null;
+};
+
+const LegacyIndustryRedirect: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>();
+  if (!slug || !INDUSTRIES[slug]) {
+    return <Navigate to="/" replace />;
+  }
+  return <Navigate to={`/${slug}`} replace />;
 };
 
 const App: React.FC = () => {
@@ -37,7 +46,10 @@ const App: React.FC = () => {
         <Route path="/terms-of-service" element={<Layout><TermsOfService /></Layout>} />
         <Route path="/request-audit" element={<Layout><RequestAudit /></Layout>} />
         <Route path="/industries" element={<Layout><IndustriesIndex /></Layout>} />
-        <Route path="/industries/:slug" element={<Layout><IndustryPage /></Layout>} />
+        <Route path="/industries/:slug" element={<LegacyIndustryRedirect />} />
+        {Object.keys(INDUSTRIES).map((slug) => (
+          <Route key={slug} path={`/${slug}`} element={<Layout><IndustryPage /></Layout>} />
+        ))}
         
         {/* Private / Internal Routes */}
         <Route path="/audit/:secureId" element={<AuditReport />} />

@@ -20,7 +20,7 @@ const IndustriesIndex: React.FC = () => {
               return (
                 <Link 
                   key={industry.slug} 
-                  to={`/industries/${industry.slug}`}
+                  to={`/${industry.slug}`}
                   className="group bg-white p-8 rounded-xl shadow-sm border border-brand-border hover:shadow-lg hover:border-brand-accent transition-all duration-300 flex flex-col h-full"
                 >
                   <div className="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center text-brand-dark mb-6 group-hover:bg-brand-accent group-hover:text-white transition-colors">

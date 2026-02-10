@@ -10,27 +10,49 @@ const IndustryPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
 
   const industry = slug ? INDUSTRIES[slug] : null;
+  const isHvacPage = industry?.slug === 'hvac';
+  const pageTitle = isHvacPage
+    ? 'HVAC Price Recovery & Market Intelligence | Phoenix, AZ | Atlas'
+    : `${industry?.name} Cost Verification & Intelligence | Phoenix, AZ | Atlas`;
+  const pageDescription = isHvacPage
+    ? 'Phoenix HVAC price intelligence with verified market floor rates for 3-ton to 5-ton systems. Independent recovery-focused valuation insights for homeowners.'
+    : `${industry?.name} cost verification and market intelligence for Phoenix-area homeowners. Independent permit-backed pricing analysis across Phoenix, Scottsdale, and Mesa.`;
+  const canonicalPath = slug ? `/${slug}` : '/';
+  const ctaText = isHvacPage ? 'Start HVAC Recovery' : `Start ${industry?.name} Audit`;
 
   useEffect(() => {
     if (industry) {
-      document.title = industry.seoTitle;
+      document.title = pageTitle;
       
       const metaDescription = document.querySelector('meta[name="description"]');
       if (metaDescription) {
-        metaDescription.setAttribute('content', industry.seoDescription);
+        metaDescription.setAttribute('content', pageDescription);
       } else {
         const meta = document.createElement('meta');
         meta.name = 'description';
-        meta.content = industry.seoDescription;
+        meta.content = pageDescription;
         document.head.appendChild(meta);
       }
+
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.setAttribute('rel', 'canonical');
+        canonical.setAttribute('data-managed-by', 'industry-page');
+        document.head.appendChild(canonical);
+      }
+      canonical.setAttribute('href', `${window.location.origin}${canonicalPath}`);
     }
     
     // Cleanup title on unmount
     return () => {
-      document.title = 'Atlas Construction Consulting | Intelligence & Advocacy';
+      document.title = 'Atlas Construction Intelligence | Market Intelligence & Cost Verification';
+      const canonical = document.querySelector('link[rel="canonical"][data-managed-by="industry-page"]');
+      if (canonical) {
+        canonical.remove();
+      }
     };
-  }, [industry]);
+  }, [industry, pageTitle, pageDescription, canonicalPath]);
 
   if (!industry) {
     return <Navigate to="/" replace />;
@@ -52,14 +74,19 @@ const IndustryPage: React.FC = () => {
                 <span className="font-bold uppercase tracking-wider text-sm">{industry.name} INTELLIGENCE</span>
               </div>
               <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
-                {industry.heroHeadline}
+                {isHvacPage ? 'Phoenix HVAC Price Intelligence & Recovery' : industry.heroHeadline}
               </h1>
+              {isHvacPage && (
+                <h2 className="text-xl md:text-2xl font-semibold text-slate-200 mb-6">
+                  Verified Market Floor Rates for 3-Ton to 5-Ton Systems.
+                </h2>
+              )}
               <p className="text-slate-300 text-lg md:text-xl leading-relaxed mb-8 max-w-2xl">
                 {industry.heroSubheadline}
               </p>
               <Link to="/request-audit">
                 <Button as="span" variant="secondary" size="lg">
-                  {industry.ctaButtonText}
+                  {ctaText}
                 </Button>
               </Link>
             </div>
@@ -188,6 +215,15 @@ const IndustryPage: React.FC = () => {
         className="bg-slate-50 border-t border-brand-border" 
       />
 
+      {/* Local Service Area Signal */}
+      <section className="py-10 bg-white border-t border-brand-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-sm md:text-base text-brand-secondary text-center">
+            Service Area: Phoenix, Scottsdale, and Mesa, Arizona.
+          </p>
+        </div>
+      </section>
+
       {/* Bottom CTA */}
       <section className="py-16 bg-slate-900 text-center">
         <div className="max-w-2xl mx-auto px-4">
@@ -197,7 +233,7 @@ const IndustryPage: React.FC = () => {
            </p>
            <Link to="/request-audit">
              <Button as="span" variant="secondary" size="lg">
-               {industry.ctaButtonText}
+               {ctaText}
              </Button>
            </Link>
         </div>

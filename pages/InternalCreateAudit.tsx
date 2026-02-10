@@ -150,7 +150,7 @@ const InternalCreateAudit: React.FC = () => {
     });
 
     const origin = window.location.origin + window.location.pathname; // Handling hash router base
-    const link = `${origin}#/audit/${id}`;
+    const link = `${origin}/audit/${id}`;
     
     setCreatedLink(link);
     setLoading(false);

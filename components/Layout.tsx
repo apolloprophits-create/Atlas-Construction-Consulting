@@ -28,13 +28,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const orgSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Atlas Construction Consulting",
-    "url": "https://atlasconsulting.phx",
-    "description": "Independent construction intelligence and price advocacy for Phoenix homeowners.",
-    "areaServed": {
-      "@type": "City",
-      "name": "Phoenix"
-    }
+    "name": "Atlas Construction Intelligence",
+    "url": "https://atlasconstructionintelligence.com",
+    "description": "Independent construction intelligence and price advocacy for Phoenix-area homeowners.",
+    "areaServed": [
+      { "@type": "City", "name": "Phoenix" },
+      { "@type": "City", "name": "Scottsdale" },
+      { "@type": "City", "name": "Mesa" }
+    ]
   };
 
   return (
@@ -57,7 +58,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <Link to="/" className="flex items-center gap-3 group">
               <img
                 src="/images/atlas-logo.png"
-                alt="Atlas Construction Consulting logo"
+                alt="Atlas Construction Intelligence logo"
                 className="h-24 sm:h-28 md:h-32 lg:h-40 w-auto object-contain"
               />
             </Link>
@@ -82,7 +83,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                      {Object.values(INDUSTRIES).map((ind) => (
                        <Link 
                         key={ind.slug} 
-                        to={`/industries/${ind.slug}`}
+                        to={`/${ind.slug}`}
                         className="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors"
                        >
                          <div className="mt-1 text-brand-accent">
@@ -126,7 +127,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {Object.values(INDUSTRIES).map((ind) => (
                   <Link 
                     key={ind.slug} 
-                    to={`/industries/${ind.slug}`}
+                    to={`/${ind.slug}`}
                     className="text-sm font-medium text-brand-dark py-2 px-3 bg-slate-50 rounded-md"
                   >
                     {ind.name}
@@ -165,7 +166,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <h4 className="font-bold text-lg mb-4">Industries</h4>
               <ul className="space-y-2 text-slate-400">
                 {Object.values(INDUSTRIES).slice(0, 5).map(ind => (
-                  <li key={ind.slug}><Link to={`/industries/${ind.slug}`} className="hover:text-white transition-colors">{ind.name}</Link></li>
+                  <li key={ind.slug}><Link to={`/${ind.slug}`} className="hover:text-white transition-colors">{ind.name}</Link></li>
                 ))}
               </ul>
             </div>
@@ -180,7 +181,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </div>
           </div>
           <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
-            <p>&copy; {new Date().getFullYear()} Atlas Construction Consulting. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Atlas Construction Intelligence. All rights reserved.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
               <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
               <Link to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>

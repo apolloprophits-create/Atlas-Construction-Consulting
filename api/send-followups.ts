@@ -15,7 +15,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL;
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const APP_BASE_URL = process.env.APP_BASE_URL || 'https://atlasconsulting.phx';
+const APP_BASE_URL = process.env.APP_BASE_URL || 'https://atlasconstructionintelligence.com';
 const CRON_SECRET = process.env.CRON_SECRET;
 
 async function sendEmail(to: string, subject: string, html: string) {
@@ -99,7 +99,7 @@ export default async function handler(req: any, res: any) {
             <h2 style="margin-bottom:8px;">Quick Follow-Up</h2>
             <p>Hi ${lead.name},</p>
             <p>Before signing, make sure your ${lead.project_type} quote includes clear line-item pricing and scope details.</p>
-            <p>You can submit additional details anytime here: <a href="${APP_BASE_URL}/#/request-audit">Request Audit</a></p>
+            <p>You can submit additional details anytime here: <a href="${APP_BASE_URL}/request-audit">Request Audit</a></p>
             <p style="margin-top:24px;color:#64748b;font-size:13px;">Atlas Construction Consulting</p>
           </div>
           `
@@ -121,7 +121,7 @@ export default async function handler(req: any, res: any) {
               <h2 style="margin-bottom:8px;">Final Reminder</h2>
               <p>Hi ${lead.name},</p>
               <p>If you still want an independent pricing check, you can complete or update your request here:</p>
-              <p><a href="${APP_BASE_URL}/#/request-audit">Open Request Form</a></p>
+              <p><a href="${APP_BASE_URL}/request-audit">Open Request Form</a></p>
               <p style="margin-top:24px;color:#64748b;font-size:13px;">Atlas Construction Consulting</p>
             </div>
             `

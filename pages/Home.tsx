@@ -172,7 +172,7 @@ const Home: React.FC = () => {
               return (
                 <Link 
                   key={industry.slug} 
-                  to={`/industries/${industry.slug}`}
+                  to={`/${industry.slug}`}
                   className="group bg-white p-6 rounded-xl shadow-sm border border-brand-border hover:shadow-md hover:border-brand-accent transition-all duration-300"
                 >
                   <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center text-brand-dark mb-4 group-hover:bg-brand-accent group-hover:text-white transition-colors">
