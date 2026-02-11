@@ -23,7 +23,23 @@
     { "source": "/plumbing", "destination": "/" },
     { "source": "/additions-remodels", "destination": "/" },
     { "source": "/concrete-flatwork", "destination": "/" },
+    { "source": "/audit-authorization", "destination": "/" },
+    { "source": "/audit-authorization/success", "destination": "/" },
     { "source": "/audit/:secureId", "destination": "/" },
     { "source": "/internal/create-audit", "destination": "/" }
+  ],
+  "headers": [
+    {
+      "source": "/audit-authorization",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet" }
+      ]
+    },
+    {
+      "source": "/audit-authorization/success",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet" }
+      ]
+    }
   ]
 }

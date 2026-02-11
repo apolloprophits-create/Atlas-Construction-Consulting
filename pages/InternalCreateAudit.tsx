@@ -26,8 +26,10 @@ const InternalCreateAudit: React.FC = () => {
   });
   
   const [createdLink, setCreatedLink] = useState<string | null>(null);
+  const [authorizationLink, setAuthorizationLink] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [authCopied, setAuthCopied] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -149,10 +151,21 @@ const InternalCreateAudit: React.FC = () => {
       whatThisMeans: meaning
     });
 
-    const origin = window.location.origin + window.location.pathname; // Handling hash router base
-    const link = `${origin}/audit/${id}`;
+    const appOrigin = window.location.origin;
+    const link = `${appOrigin}/audit/${id}`;
+    const authParams = new URLSearchParams({
+      permitId: id,
+      address: formData.zip,
+      projectType: formData.industry,
+      owner: formData.homeownerName,
+      email: '',
+      currentValuation: String(val),
+      authorizedRate: String(median)
+    });
+    const authLink = `${appOrigin}/audit-authorization?${authParams.toString()}`;
     
     setCreatedLink(link);
+    setAuthorizationLink(authLink);
     setLoading(false);
   };
 
@@ -161,6 +174,14 @@ const InternalCreateAudit: React.FC = () => {
       navigator.clipboard.writeText(createdLink);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const copyAuthorizationLink = () => {
+    if (authorizationLink) {
+      navigator.clipboard.writeText(authorizationLink);
+      setAuthCopied(true);
+      setTimeout(() => setAuthCopied(false), 2000);
     }
   };
 
@@ -367,6 +388,21 @@ const InternalCreateAudit: React.FC = () => {
                       </a>
                     </div>
                 </div>
+
+                {authorizationLink && (
+                  <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+                    <h3 className="font-bold text-blue-800 mb-4 text-lg">Phone-Call Authorization Link</h3>
+                    <div className="flex gap-2">
+                      <input readOnly value={authorizationLink} className="flex-1 p-3 text-sm border rounded-lg text-slate-600 bg-white" />
+                      <button type="button" onClick={copyAuthorizationLink} className="p-3 bg-white border rounded-lg hover:bg-slate-50 text-slate-600">
+                        {authCopied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5" />}
+                      </button>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-3">
+                      Send this link while on the phone so the homeowner can authorize and sign immediately.
+                    </p>
+                  </div>
+                )}
 
                 <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
                   <h3 className="font-bold text-brand-dark mb-4 text-lg border-b pb-2">SMS Templates</h3>

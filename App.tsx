@@ -13,6 +13,7 @@ import AuditReport from './pages/AuditReport';
 import WhatIsAudit from './pages/WhatIsAudit';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import AuditAuthorization, { AuditAuthorizationSuccess } from './pages/AuditAuthorization';
 import { INDUSTRIES } from './constants';
 
 const ScrollToTop = () => {
@@ -50,6 +51,8 @@ const App: React.FC = () => {
         {Object.keys(INDUSTRIES).map((slug) => (
           <Route key={slug} path={`/${slug}`} element={<Layout><IndustryPage /></Layout>} />
         ))}
+        <Route path="/audit-authorization" element={<AuditAuthorization />} />
+        <Route path="/audit-authorization/success" element={<AuditAuthorizationSuccess />} />
         
         {/* Private / Internal Routes */}
         <Route path="/audit/:secureId" element={<AuditReport />} />
