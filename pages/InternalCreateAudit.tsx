@@ -5,6 +5,8 @@ import { Copy, Check, Lock, Inbox, User, ArrowRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Session } from '@supabase/supabase-js';
 
+const DEFAULT_SIGN_URL = 'https://form.jotform.com/260408166912052';
+
 const InternalCreateAudit: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [email, setEmail] = useState('');
@@ -116,6 +118,7 @@ const InternalCreateAudit: React.FC = () => {
       email: '',
       currentValuation: String(valuation),
       authorizedRate: String(median),
+      signUrl: DEFAULT_SIGN_URL,
       session: Date.now().toString()
     });
     return `${appOrigin}/audit-authorization?${authParams.toString()}`;
