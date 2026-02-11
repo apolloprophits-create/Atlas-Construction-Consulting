@@ -27,9 +27,11 @@ const InternalCreateAudit: React.FC = () => {
   
   const [createdLink, setCreatedLink] = useState<string | null>(null);
   const [authorizationLink, setAuthorizationLink] = useState<string | null>(null);
+  const [freshAuthorizationLink, setFreshAuthorizationLink] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [authCopied, setAuthCopied] = useState(false);
+  const [freshAuthCopied, setFreshAuthCopied] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -104,6 +106,31 @@ const InternalCreateAudit: React.FC = () => {
     return 'green';
   };
 
+  const buildAuthorizationLink = (permitId: string, valuation: number, median: number) => {
+    const appOrigin = window.location.origin;
+    const authParams = new URLSearchParams({
+      permitId,
+      address: formData.zip,
+      projectType: formData.industry,
+      owner: formData.homeownerName,
+      email: '',
+      currentValuation: String(valuation),
+      authorizedRate: String(median),
+      session: Date.now().toString()
+    });
+    return `${appOrigin}/audit-authorization?${authParams.toString()}`;
+  };
+
+  const generateFreshAuthorizationLink = () => {
+    const permitId = `PENDING-${Date.now().toString().slice(-6)}`;
+    const link = buildAuthorizationLink(permitId, Number(formData.permittedValuation || 0), Number(formData.marketMedian || 0));
+    setFreshAuthorizationLink(link);
+    navigator.clipboard.writeText(link).then(() => {
+      setFreshAuthCopied(true);
+      setTimeout(() => setFreshAuthCopied(false), 2000);
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -153,16 +180,7 @@ const InternalCreateAudit: React.FC = () => {
 
     const appOrigin = window.location.origin;
     const link = `${appOrigin}/audit/${id}`;
-    const authParams = new URLSearchParams({
-      permitId: id,
-      address: formData.zip,
-      projectType: formData.industry,
-      owner: formData.homeownerName,
-      email: '',
-      currentValuation: String(val),
-      authorizedRate: String(median)
-    });
-    const authLink = `${appOrigin}/audit-authorization?${authParams.toString()}`;
+    const authLink = buildAuthorizationLink(id, val, median);
     
     setCreatedLink(link);
     setAuthorizationLink(authLink);
@@ -301,6 +319,41 @@ const InternalCreateAudit: React.FC = () => {
             <div className="mb-6 pb-6 border-b border-slate-100">
               <h2 className="text-xl font-bold text-brand-dark">Generate New Audit</h2>
               <p className="text-sm text-slate-500">Select a lead from the left to auto-populate details.</p>
+            </div>
+
+            <div className="mb-6 bg-indigo-50 border border-indigo-200 p-4 rounded-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <h3 className="font-bold text-indigo-900">Fresh Phone-Call Link</h3>
+                  <p className="text-xs text-indigo-800">
+                    Create a brand-new lock-in link and auto-copy it for texting while you are on the call.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={generateFreshAuthorizationLink}
+                  className="px-4 py-2 rounded-lg bg-indigo-700 text-white text-sm font-semibold hover:bg-indigo-800"
+                >
+                  Generate Fresh Link
+                </button>
+              </div>
+              {freshAuthorizationLink && (
+                <div className="mt-3 flex gap-2">
+                  <input readOnly value={freshAuthorizationLink} className="flex-1 p-2.5 text-xs border rounded-lg bg-white text-slate-700" />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(freshAuthorizationLink);
+                      setFreshAuthCopied(true);
+                      setTimeout(() => setFreshAuthCopied(false), 2000);
+                    }}
+                    className="px-3 rounded-lg border bg-white text-slate-700 hover:bg-slate-50"
+                    aria-label="Copy fresh authorization link"
+                  >
+                    {freshAuthCopied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                  </button>
+                </div>
+              )}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
