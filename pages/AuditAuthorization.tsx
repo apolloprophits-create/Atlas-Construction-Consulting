@@ -74,7 +74,14 @@ const AuditAuthorization: React.FC = () => {
         throw new Error(payload?.error || 'Could not submit authorization.');
       }
 
-      navigate('/audit-authorization/success');
+      const successParams = new URLSearchParams({
+        permitId,
+        address: propertyAddress,
+        savings: String(savings),
+        projectType,
+        owner: homeownerName
+      });
+      navigate(`/audit-authorization/success?${successParams.toString()}`);
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Could not submit authorization.');
     } finally {
@@ -213,16 +220,91 @@ const AuditAuthorization: React.FC = () => {
 };
 
 export const AuditAuthorizationSuccess: React.FC = () => {
+  const [params] = useSearchParams();
+
+  const permitId = params.get('permitId') || '[Permit Number]';
+  const propertyAddress = params.get('address') || '[Address]';
+  const projectType = params.get('projectType') || 'HVAC installation';
+  const homeownerName = params.get('owner') || 'Homeowner';
+  const savings = parseNumber(params.get('savings'), 0);
+  const formattedSavings = toCurrency(savings);
+
+  const cancellationSubject = `Notice of Cancellation - Permit #${permitId} - ${propertyAddress}`;
+  const cancellationBody = `I am writing to formally exercise my right to cancel the residential construction contract for the ${projectType} at ${propertyAddress} pursuant to A.R.S. § 32-1158.02.
+
+Please cease all project activities and provide a full refund of any deposits paid to date as required by law.
+
+An authorized representative from Atlas Construction Intelligence will be handling the transition and permit filing moving forward; please direct any logistical questions to them.`;
+
   useEffect(() => {
     document.title = 'Authorization Received | Atlas Construction Intelligence';
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4">
-      <div className="max-w-xl w-full bg-white rounded-xl border border-slate-200 shadow-sm p-8 text-center">
-        <h1 className="text-2xl font-bold text-brand-dark mb-3">Your recovery is locked in.</h1>
-        <p className="text-brand-secondary">
-          Atlas is now processing your file. We will handle the cancellation logistics with your previous provider.
+    <div className="min-h-screen bg-slate-100 py-8 px-4">
+      <div className="max-w-3xl mx-auto bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-extrabold text-brand-dark mb-2">Success: Your Savings are Locked In.</h1>
+          <p className="text-brand-secondary">
+            {homeownerName}, you have officially authorized Atlas Construction Intelligence to recover your project valuation.
+          </p>
+        </div>
+
+        <div className="bg-slate-50 rounded-lg border border-slate-200 p-5">
+          <h2 className="font-bold text-brand-dark mb-3">The "Atlas Takeover" Message</h2>
+          <div className="space-y-4 text-sm text-slate-700">
+            <div>
+              <div className="font-semibold text-brand-dark">The Cancellation</div>
+              <p>
+                You will receive a pre-written cancellation notice in your inbox. Per A.R.S. § 32-1158.02, your previous contractor is legally
+                required to honor this request.
+              </p>
+            </div>
+            <div>
+              <div className="font-semibold text-brand-dark">The New Crew</div>
+              <p>Our Master ROC Partner has been notified. We are currently syncing the permit file to their license.</p>
+            </div>
+            <div>
+              <div className="font-semibold text-brand-dark">The Contact</div>
+              <p>
+                An Atlas project lead will call you within 60 minutes to confirm your install date and handle the logistics of the switch.
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 font-semibold text-green-700">
+            Relax - we’ve got the data, we’ve got the crew, and we just saved you {formattedSavings}.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-lg border border-slate-300 p-5">
+          <h3 className="font-bold text-brand-dark mb-2">Pre-Written Cancellation Notice</h3>
+          <p className="text-sm text-slate-700 mb-3">
+            <span className="font-semibold">Subject:</span> {cancellationSubject}
+          </p>
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 text-sm text-slate-700 whitespace-pre-line">
+            {cancellationBody}
+          </div>
+          <div className="mt-3 flex flex-col sm:flex-row gap-3">
+            <button
+              type="button"
+              onClick={() => navigator.clipboard.writeText(`Subject: ${cancellationSubject}\n\n${cancellationBody}`)}
+              className="px-4 py-2 rounded-lg border border-slate-300 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            >
+              Copy Cancellation Text
+            </button>
+            <a
+              href={`mailto:?subject=${encodeURIComponent(cancellationSubject)}&body=${encodeURIComponent(cancellationBody)}`}
+              className="px-4 py-2 rounded-lg bg-brand-dark text-white text-sm font-semibold text-center hover:bg-brand-primary"
+            >
+              Open in Email App
+            </a>
+          </div>
+        </div>
+
+        <p className="text-xs text-slate-500 text-center">
+          Arizona Notice: Homeowners retain a four-day right to cancel under A.R.S. § 32-1158.02.
+          <br />
+          Permit: {permitId} | Address: {propertyAddress}
         </p>
       </div>
     </div>

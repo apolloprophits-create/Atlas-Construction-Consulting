@@ -264,8 +264,8 @@ const Home: React.FC = () => {
             <Button
               as="span"
               size="lg"
-              variant="primary"
-              className="bg-white text-brand-accent hover:bg-slate-100"
+              variant="outline"
+              className="!bg-white !text-brand-accent !border-white hover:!bg-slate-100"
             >
               Request a Price Audit
             </Button>
