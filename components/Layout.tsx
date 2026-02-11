@@ -152,6 +152,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <li><Link to="/how-it-works" className="hover:text-white transition-colors">Our Process</Link></li>
                 <li><Link to="/what-is-a-construction-price-audit" className="hover:text-white transition-colors">What is a Price Audit?</Link></li>
                 <li><Link to="/request-audit" className="hover:text-white transition-colors">Request Audit</Link></li>
+                <li><Link to="/internal/create-audit" className="hover:text-white transition-colors">Internal Access</Link></li>
               </ul>
             </div>
           </div>
