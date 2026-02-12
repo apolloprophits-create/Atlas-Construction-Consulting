@@ -193,6 +193,27 @@ const PartnerRateCard: React.FC = () => {
     [requiredChecks]
   );
 
+  const missingRequiredLabels = useMemo(() => {
+    const labels: string[] = [];
+    if (!requiredChecks.legalEntity) labels.push('Legal Entity Name');
+    if (!requiredChecks.roc) labels.push('AZ ROC License Number');
+    if (!requiredChecks.licenseDate) labels.push('License Expiration Date');
+    if (!requiredChecks.principal) labels.push('Owner / Principal Name');
+    if (!requiredChecks.cell) labels.push('Direct Cell');
+    if (!requiredChecks.email) labels.push('Business Email');
+    if (!requiredChecks.address) labels.push('Business Address');
+    if (!requiredChecks.w9) labels.push('W-9 Upload');
+    if (!requiredChecks.coi) labels.push('Certificate of Insurance Upload');
+    if (!requiredChecks.gl) labels.push('General Liability Coverage Amount');
+    if (!requiredChecks.wc) labels.push('Workers Comp Policy Number');
+    if (!requiredChecks.excludesResidential) labels.push('Residential Excludes');
+    if (!requiredChecks.excludesCommercial) labels.push('Commercial Excludes');
+    if (!requiredChecks.permitConfirm) labels.push('Permit Responsibility Confirmation');
+    if (!requiredChecks.inspectionConfirm) labels.push('Inspection Responsibility Confirmation');
+    if (!requiredChecks.rateLock) labels.push('Rate Lock Confirmation');
+    return labels;
+  }, [requiredChecks]);
+
   const sectionCompletion = useMemo(
     () => ({
       step1:
@@ -599,6 +620,12 @@ const PartnerRateCard: React.FC = () => {
 
         {error && <div className="text-sm text-red-600">{error}</div>}
         {message && <div className="text-sm text-green-700">{message}</div>}
+        {missingRequiredCount > 0 && (
+          <div className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <div className="font-semibold mb-1">Still required before submit:</div>
+            <div>{missingRequiredLabels.join(' • ')}</div>
+          </div>
+        )}
 
         <div className="hidden md:flex items-center justify-between bg-slate-50 border rounded-xl p-4">
           <div className="text-sm text-slate-700">
@@ -613,7 +640,9 @@ const PartnerRateCard: React.FC = () => {
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t p-3 z-50">
         <div className="max-w-5xl mx-auto flex items-center gap-3">
           <div className="text-xs text-slate-600 flex-1">
-            {missingRequiredCount > 0 ? `${missingRequiredCount} required field(s) remaining` : 'Ready to submit'}
+            {missingRequiredCount > 0
+              ? `${missingRequiredCount} required: ${missingRequiredLabels.slice(0, 2).join(', ')}${missingRequiredLabels.length > 2 ? '...' : ''}`
+              : 'Ready to submit'}
           </div>
           <Button type="button" onClick={() => document.querySelector('form')?.requestSubmit()} disabled={!canSubmit || loading}>
             {loading ? 'Submitting...' : 'Submit'}
