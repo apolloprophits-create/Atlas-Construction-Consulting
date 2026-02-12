@@ -286,8 +286,18 @@ const PartnerRateCard: React.FC = () => {
         throw new Error('W-9 and Certificate of Insurance uploads are required.');
       }
 
-      const w9Url = await uploadContractorDoc(w9File, 'w9');
-      const coiUrl = await uploadContractorDoc(coiFile, 'coi');
+      let w9Url = '';
+      let coiUrl = '';
+      let uploadWarning = '';
+      try {
+        w9Url = await uploadContractorDoc(w9File, 'w9');
+        coiUrl = await uploadContractorDoc(coiFile, 'coi');
+      } catch (_uploadError: any) {
+        // Do not block partner onboarding if storage RLS is still being configured.
+        w9Url = `pending-upload:${w9File.name}`;
+        coiUrl = `pending-upload:${coiFile.name}`;
+        uploadWarning = 'Document upload is pending. Atlas admin must collect W-9 and COI manually before activation.';
+      }
 
       const submission = await submitContractorRateCard({
         legalEntityName: form.legalEntityName,
@@ -362,7 +372,11 @@ const PartnerRateCard: React.FC = () => {
         rateLockConfirmed: form.rateLockConfirmed
       });
 
-      setMessage('Section 1 complete. Redirecting to Section 2 agreement and signature...');
+      setMessage(
+        uploadWarning
+          ? `${uploadWarning} Redirecting to Section 2 agreement and signature...`
+          : 'Section 1 complete. Redirecting to Section 2 agreement and signature...'
+      );
       if (submission.agreementToken) {
         window.location.href = `/partner/master-subcontractor?token=${encodeURIComponent(submission.agreementToken)}`;
       }
