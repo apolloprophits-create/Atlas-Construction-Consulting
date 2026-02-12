@@ -7,6 +7,8 @@ import type { Session } from '@supabase/supabase-js';
 import { approveContractorAndSendAgreement, getContractorsForReview, rejectContractor } from '../lib/contractorsDb';
 
 const DEFAULT_SIGN_URL = 'https://form.jotform.com/260408441474051';
+const DEFAULT_PARTNER_ONBOARDING_URL =
+  (import.meta as any).env?.VITE_PARTNER_ONBOARDING_URL || 'https://form.jotform.com/260426533476055';
 
 const InternalCreateAudit: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -188,12 +190,12 @@ const InternalCreateAudit: React.FC = () => {
   };
 
   const generateFreshPartnerLink = () => {
-    const appOrigin = window.location.origin;
+    const base = DEFAULT_PARTNER_ONBOARDING_URL;
     const params = new URLSearchParams({
       source: 'internal',
       session: Date.now().toString()
     });
-    const link = `${appOrigin}/partner/rate-card?${params.toString()}`;
+    const link = `${base}${base.includes('?') ? '&' : '?'}${params.toString()}`;
     setFreshPartnerLink(link);
     navigator.clipboard.writeText(link).then(() => {
       setFreshPartnerCopied(true);
@@ -590,7 +592,7 @@ const InternalCreateAudit: React.FC = () => {
               <div>
                 <h3 className="font-bold text-indigo-900">Partner Onboarding Link</h3>
                 <p className="text-xs text-indigo-800">
-                  Generate a ready-to-text link for partners to submit Form 1.
+                  Generate a ready-to-text link for partners to complete onboarding + agreement in one form.
                 </p>
               </div>
               <button
