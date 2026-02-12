@@ -14,7 +14,6 @@ import WhatIsAudit from './pages/WhatIsAudit';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import AuditAuthorization, { AuditAuthorizationSuccess } from './pages/AuditAuthorization';
-import PartnerRateCard from './pages/PartnerRateCard';
 import PartnerMasterSubcontractor from './pages/PartnerMasterSubcontractor';
 import InternalPartnerReview from './pages/InternalPartnerReview';
 import { INDUSTRIES } from './constants';
@@ -56,7 +55,7 @@ const App: React.FC = () => {
         ))}
         <Route path="/audit-authorization" element={<AuditAuthorization />} />
         <Route path="/audit-authorization/success" element={<AuditAuthorizationSuccess />} />
-        <Route path="/partner/rate-card" element={<Layout><PartnerRateCard /></Layout>} />
+        <Route path="/partner/rate-card" element={<Navigate to="/internal/create-audit" replace />} />
         <Route path="/partner/master-subcontractor" element={<Layout><PartnerMasterSubcontractor /></Layout>} />
         
         {/* Private / Internal Routes */}

@@ -4,11 +4,12 @@ import Button from '../components/ui/Button';
 import { Copy, Check, Lock, Inbox, User, ArrowRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Session } from '@supabase/supabase-js';
-import { approveContractorAndSendAgreement, getContractorsForReview, rejectContractor } from '../lib/contractorsDb';
 
 const DEFAULT_SIGN_URL = 'https://form.jotform.com/260408441474051';
 const DEFAULT_PARTNER_ONBOARDING_URL =
   (import.meta as any).env?.VITE_PARTNER_ONBOARDING_URL || 'https://form.jotform.com/260426533476055';
+const DEFAULT_PARTNER_SUBMISSIONS_URL =
+  (import.meta as any).env?.VITE_PARTNER_ONBOARDING_SUBMISSIONS_URL || 'https://www.jotform.com/myforms/';
 
 const InternalCreateAudit: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -40,10 +41,6 @@ const InternalCreateAudit: React.FC = () => {
   const [freshAuthCopied, setFreshAuthCopied] = useState(false);
   const [freshPartnerCopied, setFreshPartnerCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<'audit' | 'partner'>('audit');
-  const [contractors, setContractors] = useState<any[]>([]);
-  const [contractorActionMsg, setContractorActionMsg] = useState('');
-  const [contractorActionErr, setContractorActionErr] = useState('');
-  const [contractorBusyId, setContractorBusyId] = useState('');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -74,51 +71,6 @@ const InternalCreateAudit: React.FC = () => {
       setLeads([]);
     }
   }, [session]);
-
-  const loadContractors = async () => {
-    try {
-      const rows = await getContractorsForReview();
-      setContractors(rows);
-    } catch (error: any) {
-      setContractorActionErr(error?.message || 'Failed to load partner submissions');
-    }
-  };
-
-  useEffect(() => {
-    if (session && activeTab === 'partner') {
-      loadContractors();
-    }
-  }, [session, activeTab]);
-
-  const approvePartner = async (id: string) => {
-    setContractorBusyId(id);
-    setContractorActionErr('');
-    setContractorActionMsg('');
-    try {
-      await approveContractorAndSendAgreement(id);
-      setContractorActionMsg('Approved and Form 2 agreement sent.');
-      await loadContractors();
-    } catch (error: any) {
-      setContractorActionErr(error?.message || 'Approval failed');
-    } finally {
-      setContractorBusyId('');
-    }
-  };
-
-  const rejectPartner = async (id: string) => {
-    setContractorBusyId(id);
-    setContractorActionErr('');
-    setContractorActionMsg('');
-    try {
-      await rejectContractor(id);
-      setContractorActionMsg('Submission rejected.');
-      await loadContractors();
-    } catch (error: any) {
-      setContractorActionErr(error?.message || 'Reject failed');
-    } finally {
-      setContractorBusyId('');
-    }
-  };
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -586,7 +538,7 @@ const InternalCreateAudit: React.FC = () => {
 
       {activeTab === 'partner' && (
         <div className="bg-white rounded-xl border border-brand-border p-6 space-y-4">
-          <h2 className="text-xl font-bold text-brand-dark">Partner Submissions - Admin Review</h2>
+          <h2 className="text-xl font-bold text-brand-dark">Partner Link Generator</h2>
           <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-xl">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
@@ -595,13 +547,23 @@ const InternalCreateAudit: React.FC = () => {
                   Generate a ready-to-text link for partners to complete onboarding + agreement in one form.
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={generateFreshPartnerLink}
-                className="px-4 py-2 rounded-lg bg-indigo-700 text-white text-sm font-semibold hover:bg-indigo-800"
-              >
-                Generate Partner Form Link
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={generateFreshPartnerLink}
+                  className="px-4 py-2 rounded-lg bg-indigo-700 text-white text-sm font-semibold hover:bg-indigo-800"
+                >
+                  Generate Partner Form Link
+                </button>
+                <a
+                  href={DEFAULT_PARTNER_SUBMISSIONS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-lg border bg-white text-slate-700 text-sm font-semibold hover:bg-slate-50"
+                >
+                  View Jotform Submissions
+                </a>
+              </div>
             </div>
             {freshPartnerLink && (
               <div className="mt-3 flex flex-col sm:flex-row gap-2">
@@ -635,41 +597,11 @@ const InternalCreateAudit: React.FC = () => {
               </div>
             )}
           </div>
-          {contractorActionMsg && <div className="text-sm text-green-700">{contractorActionMsg}</div>}
-          {contractorActionErr && <div className="text-sm text-red-600">{contractorActionErr}</div>}
-          <div className="space-y-3">
-            {contractors.length === 0 && (
-              <div className="text-sm text-slate-500">No partner submissions yet.</div>
-            )}
-            {contractors.map((row) => (
-              <div key={row.id} className="border rounded-xl p-4 flex items-start justify-between gap-4">
-                <div>
-                  <div className="font-bold text-brand-dark">{row.legal_entity_name}</div>
-                  <div className="text-sm text-slate-600">ROC {row.roc_license_number}</div>
-                  <div className="text-sm text-slate-600">{row.owner_principal_name} · {row.direct_cell}</div>
-                  <div className="text-sm text-slate-600">{row.business_email}</div>
-                  <div className="text-sm text-slate-600">{row.business_address}</div>
-                  <div className="text-xs mt-1 uppercase tracking-wide text-slate-500">Status: {row.status}</div>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    onClick={() => approvePartner(row.id)}
-                    disabled={contractorBusyId === row.id || row.status === 'active_partner' || row.status === 'agreement_sent'}
-                  >
-                    {contractorBusyId === row.id ? 'Working...' : 'Approve + Trigger Form 2'}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => rejectPartner(row.id)}
-                    disabled={contractorBusyId === row.id || row.status === 'active_partner'}
-                  >
-                    Reject
-                  </Button>
-                </div>
-              </div>
-            ))}
+          <div className="border rounded-xl p-4 text-sm text-slate-700 bg-slate-50">
+            <div className="font-semibold text-brand-dark mb-2">Simple Flow</div>
+            <div>1. Click <strong>Generate Partner Form Link</strong>.</div>
+            <div>2. Text the link to the partner.</div>
+            <div>3. Review submissions directly in Jotform inbox/email.</div>
           </div>
         </div>
       )}
