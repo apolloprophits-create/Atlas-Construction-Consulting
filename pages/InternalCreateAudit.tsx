@@ -4,8 +4,9 @@ import Button from '../components/ui/Button';
 import { Copy, Check, Lock, Inbox, User, ArrowRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Session } from '@supabase/supabase-js';
+import { Link } from 'react-router-dom';
 
-const DEFAULT_SIGN_URL = 'https://form.jotform.com/260408166912052';
+const DEFAULT_SIGN_URL = 'https://form.jotform.com/260408441474051';
 
 const InternalCreateAudit: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -254,6 +255,20 @@ const InternalCreateAudit: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4">
+      <div className="mb-4 bg-white border border-brand-border rounded-xl p-2 flex flex-wrap gap-2">
+        <Link
+          to="/internal/create-audit"
+          className="px-3 py-2 rounded-lg text-sm font-semibold bg-brand-dark text-white"
+        >
+          Create Audit
+        </Link>
+        <Link
+          to="/internal/partner-reviews"
+          className="px-3 py-2 rounded-lg text-sm font-semibold border border-slate-300 text-brand-dark hover:bg-slate-50"
+        >
+          Partner Onboarding Review
+        </Link>
+      </div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-brand-dark">Analyst Dashboard</h1>
         <div className="flex items-center gap-3">
