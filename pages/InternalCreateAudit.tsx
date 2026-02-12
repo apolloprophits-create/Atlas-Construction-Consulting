@@ -31,10 +31,12 @@ const InternalCreateAudit: React.FC = () => {
   const [createdLink, setCreatedLink] = useState<string | null>(null);
   const [authorizationLink, setAuthorizationLink] = useState<string | null>(null);
   const [freshAuthorizationLink, setFreshAuthorizationLink] = useState<string | null>(null);
+  const [freshPartnerLink, setFreshPartnerLink] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [authCopied, setAuthCopied] = useState(false);
   const [freshAuthCopied, setFreshAuthCopied] = useState(false);
+  const [freshPartnerCopied, setFreshPartnerCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<'audit' | 'partner'>('audit');
   const [contractors, setContractors] = useState<any[]>([]);
   const [contractorActionMsg, setContractorActionMsg] = useState('');
@@ -182,6 +184,20 @@ const InternalCreateAudit: React.FC = () => {
     navigator.clipboard.writeText(link).then(() => {
       setFreshAuthCopied(true);
       setTimeout(() => setFreshAuthCopied(false), 2000);
+    });
+  };
+
+  const generateFreshPartnerLink = () => {
+    const appOrigin = window.location.origin;
+    const params = new URLSearchParams({
+      source: 'internal',
+      session: Date.now().toString()
+    });
+    const link = `${appOrigin}/partner/rate-card?${params.toString()}`;
+    setFreshPartnerLink(link);
+    navigator.clipboard.writeText(link).then(() => {
+      setFreshPartnerCopied(true);
+      setTimeout(() => setFreshPartnerCopied(false), 2000);
     });
   };
 
@@ -569,6 +585,54 @@ const InternalCreateAudit: React.FC = () => {
       {activeTab === 'partner' && (
         <div className="bg-white rounded-xl border border-brand-border p-6 space-y-4">
           <h2 className="text-xl font-bold text-brand-dark">Partner Submissions - Admin Review</h2>
+          <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <h3 className="font-bold text-indigo-900">Partner Onboarding Link</h3>
+                <p className="text-xs text-indigo-800">
+                  Generate a ready-to-text link for partners to submit Form 1.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={generateFreshPartnerLink}
+                className="px-4 py-2 rounded-lg bg-indigo-700 text-white text-sm font-semibold hover:bg-indigo-800"
+              >
+                Generate Partner Form Link
+              </button>
+            </div>
+            {freshPartnerLink && (
+              <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                <input
+                  readOnly
+                  value={freshPartnerLink}
+                  className="flex-1 p-2.5 text-xs border rounded-lg bg-white text-slate-700"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(freshPartnerLink);
+                      setFreshPartnerCopied(true);
+                      setTimeout(() => setFreshPartnerCopied(false), 2000);
+                    }}
+                    className="px-3 rounded-lg border bg-white text-slate-700 hover:bg-slate-50"
+                    aria-label="Copy partner onboarding link"
+                  >
+                    {freshPartnerCopied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+                  </button>
+                  <a
+                    href={freshPartnerLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-2 rounded-lg border bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold"
+                  >
+                    Open Form
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
           {contractorActionMsg && <div className="text-sm text-green-700">{contractorActionMsg}</div>}
           {contractorActionErr && <div className="text-sm text-red-600">{contractorActionErr}</div>}
           <div className="space-y-3">
