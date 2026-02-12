@@ -14,6 +14,9 @@ import WhatIsAudit from './pages/WhatIsAudit';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import AuditAuthorization, { AuditAuthorizationSuccess } from './pages/AuditAuthorization';
+import PartnerRateCard from './pages/PartnerRateCard';
+import PartnerMasterSubcontractor from './pages/PartnerMasterSubcontractor';
+import InternalPartnerReview from './pages/InternalPartnerReview';
 import { INDUSTRIES } from './constants';
 
 const ScrollToTop = () => {
@@ -53,10 +56,13 @@ const App: React.FC = () => {
         ))}
         <Route path="/audit-authorization" element={<AuditAuthorization />} />
         <Route path="/audit-authorization/success" element={<AuditAuthorizationSuccess />} />
+        <Route path="/partner/rate-card" element={<Layout><PartnerRateCard /></Layout>} />
+        <Route path="/partner/master-subcontractor" element={<Layout><PartnerMasterSubcontractor /></Layout>} />
         
         {/* Private / Internal Routes */}
         <Route path="/audit/:secureId" element={<AuditReport />} />
         <Route path="/internal/create-audit" element={<Layout><InternalCreateAudit /></Layout>} />
+        <Route path="/internal/partner-reviews" element={<Layout><InternalPartnerReview /></Layout>} />
         {/* Fallback */}
         <Route path="*" element={<Layout><Home /></Layout>} />
       </Routes>

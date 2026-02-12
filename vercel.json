@@ -26,7 +26,10 @@
     { "source": "/audit-authorization", "destination": "/" },
     { "source": "/audit-authorization/success", "destination": "/" },
     { "source": "/audit/:secureId", "destination": "/" },
-    { "source": "/internal/create-audit", "destination": "/" }
+    { "source": "/internal/create-audit", "destination": "/" },
+    { "source": "/internal/partner-reviews", "destination": "/" },
+    { "source": "/partner/rate-card", "destination": "/" },
+    { "source": "/partner/master-subcontractor", "destination": "/" }
   ],
   "headers": [
     {
@@ -37,6 +40,24 @@
     },
     {
       "source": "/audit-authorization/success",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet" }
+      ]
+    },
+    {
+      "source": "/partner/rate-card",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet" }
+      ]
+    },
+    {
+      "source": "/partner/master-subcontractor",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet" }
+      ]
+    },
+    {
+      "source": "/internal/partner-reviews",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive, nosnippet" }
       ]
