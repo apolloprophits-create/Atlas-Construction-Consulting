@@ -4,7 +4,7 @@ import Button from '../components/ui/Button';
 import { Copy, Check, Lock, Inbox, User, ArrowRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Session } from '@supabase/supabase-js';
-import { Link } from 'react-router-dom';
+import { approveContractorAndSendAgreement, getContractorsForReview, rejectContractor } from '../lib/contractorsDb';
 
 const DEFAULT_SIGN_URL = 'https://form.jotform.com/260408441474051';
 
@@ -35,6 +35,11 @@ const InternalCreateAudit: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [authCopied, setAuthCopied] = useState(false);
   const [freshAuthCopied, setFreshAuthCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<'audit' | 'partner'>('audit');
+  const [contractors, setContractors] = useState<any[]>([]);
+  const [contractorActionMsg, setContractorActionMsg] = useState('');
+  const [contractorActionErr, setContractorActionErr] = useState('');
+  const [contractorBusyId, setContractorBusyId] = useState('');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -65,6 +70,51 @@ const InternalCreateAudit: React.FC = () => {
       setLeads([]);
     }
   }, [session]);
+
+  const loadContractors = async () => {
+    try {
+      const rows = await getContractorsForReview();
+      setContractors(rows);
+    } catch (error: any) {
+      setContractorActionErr(error?.message || 'Failed to load partner submissions');
+    }
+  };
+
+  useEffect(() => {
+    if (session && activeTab === 'partner') {
+      loadContractors();
+    }
+  }, [session, activeTab]);
+
+  const approvePartner = async (id: string) => {
+    setContractorBusyId(id);
+    setContractorActionErr('');
+    setContractorActionMsg('');
+    try {
+      await approveContractorAndSendAgreement(id);
+      setContractorActionMsg('Approved and Form 2 agreement sent.');
+      await loadContractors();
+    } catch (error: any) {
+      setContractorActionErr(error?.message || 'Approval failed');
+    } finally {
+      setContractorBusyId('');
+    }
+  };
+
+  const rejectPartner = async (id: string) => {
+    setContractorBusyId(id);
+    setContractorActionErr('');
+    setContractorActionMsg('');
+    try {
+      await rejectContractor(id);
+      setContractorActionMsg('Submission rejected.');
+      await loadContractors();
+    } catch (error: any) {
+      setContractorActionErr(error?.message || 'Reject failed');
+    } finally {
+      setContractorBusyId('');
+    }
+  };
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -256,18 +306,20 @@ const InternalCreateAudit: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto py-12 px-4">
       <div className="mb-4 bg-white border border-brand-border rounded-xl p-2 flex flex-wrap gap-2">
-        <Link
-          to="/internal/create-audit"
-          className="px-3 py-2 rounded-lg text-sm font-semibold bg-brand-dark text-white"
+        <button
+          type="button"
+          onClick={() => setActiveTab('audit')}
+          className={`px-3 py-2 rounded-lg text-sm font-semibold ${activeTab === 'audit' ? 'bg-brand-dark text-white' : 'border border-slate-300 text-brand-dark hover:bg-slate-50'}`}
         >
           Create Audit
-        </Link>
-        <Link
-          to="/internal/partner-reviews"
-          className="px-3 py-2 rounded-lg text-sm font-semibold border border-slate-300 text-brand-dark hover:bg-slate-50"
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('partner')}
+          className={`px-3 py-2 rounded-lg text-sm font-semibold ${activeTab === 'partner' ? 'bg-brand-dark text-white' : 'border border-slate-300 text-brand-dark hover:bg-slate-50'}`}
         >
           Partner Onboarding Review
-        </Link>
+        </button>
       </div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-brand-dark">Analyst Dashboard</h1>
@@ -282,6 +334,7 @@ const InternalCreateAudit: React.FC = () => {
         </div>
       </div>
       
+      {activeTab === 'audit' && (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Sidebar: Lead Inbox */}
@@ -511,6 +564,49 @@ const InternalCreateAudit: React.FC = () => {
           </div>
         </div>
       </div>
+      )}
+
+      {activeTab === 'partner' && (
+        <div className="bg-white rounded-xl border border-brand-border p-6 space-y-4">
+          <h2 className="text-xl font-bold text-brand-dark">Partner Submissions - Admin Review</h2>
+          {contractorActionMsg && <div className="text-sm text-green-700">{contractorActionMsg}</div>}
+          {contractorActionErr && <div className="text-sm text-red-600">{contractorActionErr}</div>}
+          <div className="space-y-3">
+            {contractors.length === 0 && (
+              <div className="text-sm text-slate-500">No partner submissions yet.</div>
+            )}
+            {contractors.map((row) => (
+              <div key={row.id} className="border rounded-xl p-4 flex items-start justify-between gap-4">
+                <div>
+                  <div className="font-bold text-brand-dark">{row.legal_entity_name}</div>
+                  <div className="text-sm text-slate-600">ROC {row.roc_license_number}</div>
+                  <div className="text-sm text-slate-600">{row.owner_principal_name} · {row.direct_cell}</div>
+                  <div className="text-sm text-slate-600">{row.business_email}</div>
+                  <div className="text-sm text-slate-600">{row.business_address}</div>
+                  <div className="text-xs mt-1 uppercase tracking-wide text-slate-500">Status: {row.status}</div>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => approvePartner(row.id)}
+                    disabled={contractorBusyId === row.id || row.status === 'active_partner' || row.status === 'agreement_sent'}
+                  >
+                    {contractorBusyId === row.id ? 'Working...' : 'Approve + Trigger Form 2'}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => rejectPartner(row.id)}
+                    disabled={contractorBusyId === row.id || row.status === 'active_partner'}
+                  >
+                    Reject
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
