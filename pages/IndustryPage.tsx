@@ -116,21 +116,35 @@ const IndustryPage: React.FC = () => {
             </div>
             {/* Visual Abstract for Industry */}
             <div className="hidden md:flex justify-center items-center w-full max-w-xs">
-               <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20 w-full">
-                 <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+              {isHvacPage ? (
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20 w-full">
+                  <img
+                    src="/images/hvac.png"
+                    alt="HVAC equipment and service illustration"
+                    className="w-full h-auto rounded-xl"
+                    loading="eager"
+                  />
+                  <div className="mt-3 text-xs text-slate-300">
+                    Permit-backed HVAC pricing signals for Phoenix-area installs.
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20 w-full">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
                     <span className="text-xs text-slate-400 font-mono">MARKET_VARIANCE</span>
                     <span className="text-xs text-red-300 font-mono">DETECTED</span>
-                 </div>
-                 <div className="space-y-3">
+                  </div>
+                  <div className="space-y-3">
                     <div className="h-2 bg-white/20 rounded-full w-3/4"></div>
                     <div className="h-2 bg-white/20 rounded-full w-full"></div>
                     <div className="h-2 bg-white/20 rounded-full w-5/6"></div>
-                 </div>
-                 <div className="mt-6 flex gap-2">
+                  </div>
+                  <div className="mt-6 flex gap-2">
                     <div className="px-2 py-1 bg-brand-accent/30 rounded text-xs text-brand-accent">High Risk</div>
                     <div className="px-2 py-1 bg-white/10 rounded text-xs">Volatile</div>
-                 </div>
-               </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
