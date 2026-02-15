@@ -75,7 +75,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 ))}
               </div>
               <Link to="/about" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">About</Link>
-              <Link to="/how-it-works" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">How It Works</Link>
+              <Link to="/how-it-works" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">How it works</Link>
               <Link to="/request-audit">
                 <Button as="span" variant="primary" size="sm">
                   Request Price Audit
@@ -111,7 +111,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
              </div>
              <div className="border-t border-brand-border pt-4 flex flex-col gap-4">
                 <Link to="/about" className="text-base font-medium text-brand-dark">About</Link>
-                <Link to="/how-it-works" className="text-base font-medium text-brand-dark">How It Works</Link>
+                <Link to="/how-it-works" className="text-base font-medium text-brand-dark">How it works</Link>
                 <Link to="/request-audit" className="block">
                   <Button as="span" fullWidth>Request Audit</Button>
                 </Link>
@@ -152,7 +152,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <li><Link to="/how-it-works" className="hover:text-white transition-colors">Our Process</Link></li>
                 <li><Link to="/what-is-a-construction-price-audit" className="hover:text-white transition-colors">What is a Price Audit?</Link></li>
                 <li><Link to="/request-audit" className="hover:text-white transition-colors">Request Audit</Link></li>
+                <li><Link to="/partner/rate-card" className="hover:text-white transition-colors">Partner Rate Card</Link></li>
                 <li><Link to="/internal/create-audit" className="hover:text-white transition-colors">Internal Access</Link></li>
+                <li><Link to="/internal/partner-reviews" className="hover:text-white transition-colors">Partner Reviews</Link></li>
               </ul>
             </div>
           </div>

@@ -115,7 +115,7 @@ const IndustryPage: React.FC = () => {
               </Link>
             </div>
             {/* Visual Abstract for Industry */}
-            <div className="hidden md:flex justify-center items-center w-full max-w-xs">
+            <div className="hidden md:flex justify-center items-center w-full max-w-xl">
               {isHvacPage ? (
                 <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20 w-full">
                   <img
