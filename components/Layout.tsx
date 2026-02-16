@@ -28,7 +28,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     "@type": "Organization",
     "name": "Atlas Construction Intelligence",
     "url": "https://atlasconstructionintelligence.com",
-    "description": "Independent construction intelligence and price advocacy for Phoenix-area homeowners.",
+    "description": "Construction intelligence platform for owner representation, fair-market project management, and licensed trade coordination in Arizona.",
     "areaServed": [
       { "@type": "City", "name": "Phoenix" },
       { "@type": "City", "name": "Scottsdale" },
@@ -62,25 +62,19 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </Link>
 
             {/* Desktop Nav */}
-            <div className="hidden md:flex items-center space-x-6">
-              <div className="flex items-center gap-4">
-                {Object.values(INDUSTRIES).map((ind) => (
-                  <Link
-                    key={ind.slug}
-                    to={`/industries/${ind.slug}`}
-                    className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors whitespace-nowrap"
-                  >
-                    {ind.name}
-                  </Link>
-                ))}
-              </div>
-              <Link to="/about" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">About</Link>
-              <Link to="/how-it-works" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">How it works</Link>
+            <div className="hidden md:flex items-center gap-5">
+              <div className="text-[11px] font-bold uppercase tracking-wide text-slate-400">For Clients</div>
+              <Link to="/hvac" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">Commercial Services</Link>
+              <Link to="/how-it-works" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">Residential Upgrades</Link>
+              <Link to="/concrete" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">Investor Portfolios</Link>
               <Link to="/request-audit">
                 <Button as="span" variant="primary" size="sm">
-                  Request Price Audit
+                  Get a Bid
                 </Button>
               </Link>
+              <div className="h-6 w-px bg-brand-border mx-1"></div>
+              <div className="text-[11px] font-bold uppercase tracking-wide text-slate-400">For Contractors</div>
+              <Link to="/partner-portal" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">Partner Login</Link>
             </div>
 
             {/* Mobile Toggle */}
@@ -97,24 +91,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-brand-border shadow-lg p-4 flex flex-col gap-4 animate-in slide-in-from-top-5">
-             <div className="font-semibold text-brand-secondary text-xs uppercase tracking-wider mb-2">Industries</div>
-             <div className="grid grid-cols-2 gap-2 mb-4">
-                {Object.values(INDUSTRIES).map((ind) => (
-                  <Link 
-                    key={ind.slug} 
-                    to={`/industries/${ind.slug}`}
-                    className="text-sm font-medium text-brand-dark py-2 px-3 bg-slate-50 rounded-md"
-                  >
-                    {ind.name}
-                  </Link>
-                ))}
-             </div>
+             <div className="font-semibold text-brand-secondary text-xs uppercase tracking-wider mb-2">For Clients</div>
              <div className="border-t border-brand-border pt-4 flex flex-col gap-4">
-                <Link to="/about" className="text-base font-medium text-brand-dark">About</Link>
-                <Link to="/how-it-works" className="text-base font-medium text-brand-dark">How it works</Link>
+                <Link to="/hvac" className="text-base font-medium text-brand-dark">Commercial Services</Link>
+                <Link to="/how-it-works" className="text-base font-medium text-brand-dark">Residential Upgrades</Link>
+                <Link to="/concrete" className="text-base font-medium text-brand-dark">Investor Portfolios</Link>
                 <Link to="/request-audit" className="block">
-                  <Button as="span" fullWidth>Request Audit</Button>
+                  <Button as="span" fullWidth>Get a Fair Market Proposal</Button>
                 </Link>
+                <div className="pt-2 border-t border-brand-border"></div>
+                <div className="font-semibold text-brand-secondary text-xs uppercase tracking-wider">For Contractors</div>
+                <Link to="/partner-portal" className="text-base font-medium text-brand-dark">Partner Login</Link>
              </div>
           </div>
         )}
@@ -132,9 +119,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div className="col-span-1 md:col-span-2">
               <div className="text-2xl font-bold tracking-tight mb-4">ATLAS</div>
               <p className="text-slate-400 max-w-sm leading-relaxed">
-                Construction Intelligence. Price Advocacy. Market Transparency.
+                Construction Intelligence Platform. Owner Representation. Managed Execution.
                 <br />
-                We provide independent data analytics to protect Phoenix homeowners from overpaying on major renovations.
+                We manage fair-market project execution by routing owners directly to licensed, bonded, and insured partner trades.
               </p>
             </div>
             <div>
@@ -150,13 +137,19 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <ul className="space-y-2 text-slate-400">
                 <li><Link to="/about" className="hover:text-white transition-colors">About Atlas</Link></li>
                 <li><Link to="/how-it-works" className="hover:text-white transition-colors">Our Process</Link></li>
-                <li><Link to="/what-is-a-construction-price-audit" className="hover:text-white transition-colors">What is a Price Audit?</Link></li>
-                <li><Link to="/request-audit" className="hover:text-white transition-colors">Request Audit</Link></li>
-                <li><Link to="/partner/rate-card" className="hover:text-white transition-colors">Partner Rate Card</Link></li>
+                <li><Link to="/request-audit" className="hover:text-white transition-colors">Get a Fair Market Proposal</Link></li>
+                <li><Link to="/partner-portal" className="hover:text-white transition-colors">Partner Login</Link></li>
                 <li><Link to="/internal/create-audit" className="hover:text-white transition-colors">Internal Access</Link></li>
-                <li><Link to="/internal/partner-reviews" className="hover:text-white transition-colors">Partner Reviews</Link></li>
               </ul>
             </div>
+          </div>
+          <div className="border-t border-slate-800 pt-6 mb-8">
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Legal Disclaimer: Atlas Construction Intelligence is a construction management and data analytics firm, not a licensed contractor.
+              All construction services are performed by licensed, bonded, and insured partners within the Atlas Network. Atlas acts solely as an
+              Owner&apos;s Representative to facilitate pricing, scheduling, and quality control. Contracts for labor and materials are executed directly
+              between the Property Owner and the Licensed Contractor.
+            </p>
           </div>
           <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
             <p>&copy; {new Date().getFullYear()} Atlas Construction Intelligence. All rights reserved.</p>
