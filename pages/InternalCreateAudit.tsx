@@ -7,7 +7,7 @@ import type { Session } from '@supabase/supabase-js';
 
 const DEFAULT_SIGN_URL = 'https://form.jotform.com/260408441474051';
 const DEFAULT_PARTNER_ONBOARDING_URL =
-  (import.meta as any).env?.VITE_PARTNER_ONBOARDING_URL || 'https://form.jotform.com/260426533476055';
+  (import.meta as any).env?.VITE_PARTNER_ONBOARDING_URL || 'https://form.jotform.com/260457342301044';
 const DEFAULT_PARTNER_SUBMISSIONS_URL =
   (import.meta as any).env?.VITE_PARTNER_ONBOARDING_SUBMISSIONS_URL || 'https://www.jotform.com/myforms/';
 

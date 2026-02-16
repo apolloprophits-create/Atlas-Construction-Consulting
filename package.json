@@ -6,11 +6,21 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "filter:hvac": "node scripts/filter-hvac-permits.mjs",
+    "enrich:phx": "node scripts/enrich-phoenix-permits.mjs",
+    "pull:phxpdf": "node scripts/pull-phx-permit-pdfs.mjs",
+    "pull:phxpdf:browser": "node scripts/pull-phx-planreviews-playwright.mjs",
+    "pull:phxpdf:browser:headed": "node scripts/pull-phx-planreviews-playwright.mjs --headed",
+    "build:hvac:whales": "node scripts/build-hvac-whales.mjs",
+    "hvac:phase1": "node scripts/hvac-phase1-api.mjs",
+    "hvac:phase2": "node scripts/hvac-phase2-shape-enrich.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.95.3",
+    "@vercel/analytics": "^1.6.1",
     "lucide-react": "^0.563.0",
+    "playwright": "^1.55.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.0"

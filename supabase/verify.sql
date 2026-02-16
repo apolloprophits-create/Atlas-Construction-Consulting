@@ -5,7 +5,7 @@
 select table_name
 from information_schema.tables
 where table_schema = 'public'
-  and table_name in ('leads', 'audits')
+  and table_name in ('leads', 'audits', 'contractors')
 order by table_name;
 
 -- 2) Leads policies (must include anon INSERT)
@@ -23,6 +23,14 @@ where schemaname = 'public'
 order by policyname;
 
 -- 4) Public RPC for report view
+-- 4) Contractors policies (must include anon INSERT and authenticated SELECT/UPDATE)
+select policyname, cmd, roles
+from pg_policies
+where schemaname = 'public'
+  and tablename = 'contractors'
+order by policyname;
+
+-- 5) Public RPC for report view
 select routine_name
 from information_schema.routines
 where routine_schema = 'public'

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -65,6 +66,7 @@ const App: React.FC = () => {
         {/* Fallback */}
         <Route path="*" element={<Layout><Home /></Layout>} />
       </Routes>
+      <Analytics />
     </Router>
   );
 };

@@ -24,6 +24,7 @@
    - `RESEND_API_KEY`
    - `RESEND_FROM_EMAIL`
    - `APP_BASE_URL`
+   - `VITE_PARTNER_MSA_SIGN_URL` (your embedded signature form URL for Form 2)
    - `CRON_SECRET`
 4. In Supabase, open **SQL Editor** and run:
    - `supabase/schema.sql`
@@ -38,6 +39,10 @@
 7. Internal dashboard login:
    - Go to `/#/internal/create-audit`
    - Sign in with the Supabase user from step 5
+8. Partner onboarding routes:
+   - Form 1 (Rate Submission): `/#/partner/rate-card`
+   - Internal approval queue: `/#/internal/partner-reviews`
+   - Form 2 (Agreement from emailed link): `/#/partner/master-subcontractor?token=...`
 
 ## Build Check
 
@@ -54,6 +59,9 @@ npm run build
 - Only authenticated users can read leads and create audits.
 - Public audit reports are loaded through a restricted RPC (`get_public_audit`).
 - Email chain is server-side via Vercel API functions and Resend.
+- Contractor uploads use Supabase Storage bucket `contractor-docs`.
+- Form 1 submissions write to `public.contractors` with `status = pending_review`.
+- Internal approval triggers Form 2 agreement email and tokenized link.
 
 ## Email Chain (Resend)
 

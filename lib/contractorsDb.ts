@@ -74,14 +74,17 @@ export async function submitContractorRateCard(payload: ContractorRateSubmission
       rate_lock_confirmed: payload.rateLockConfirmed,
       status: 'pending_review'
     })
-    .select('id')
+    .select('id, agreement_token')
     .single();
 
   if (error || !data) {
     throw new Error(error?.message || 'Failed to submit rate card');
   }
 
-  return data.id as string;
+  return {
+    id: data.id as string,
+    agreementToken: data.agreement_token as string
+  };
 }
 
 export async function getContractorsForReview() {
@@ -132,4 +135,3 @@ export async function rejectContractor(contractorId: string) {
     throw new Error(`Failed to reject contractor: ${error.message}`);
   }
 }
-
