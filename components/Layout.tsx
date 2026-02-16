@@ -64,6 +64,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-5">
               <div className="text-[11px] font-bold uppercase tracking-wide text-slate-400">For Clients</div>
+              <Link to="/industries" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">Industries</Link>
               <Link to="/hvac" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">Commercial Services</Link>
               <Link to="/how-it-works" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">Residential Upgrades</Link>
               <Link to="/concrete" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">Investor Portfolios</Link>
@@ -94,6 +95,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
              <div className="font-semibold text-brand-secondary text-xs uppercase tracking-wider mb-2">For Clients</div>
              <div className="border-t border-brand-border pt-4 flex flex-col gap-4">
                 <Link to="/hvac" className="text-base font-medium text-brand-dark">Commercial Services</Link>
+                <Link to="/industries" className="text-base font-medium text-brand-dark">Industries</Link>
                 <Link to="/how-it-works" className="text-base font-medium text-brand-dark">Residential Upgrades</Link>
                 <Link to="/concrete" className="text-base font-medium text-brand-dark">Investor Portfolios</Link>
                 <Link to="/request-audit" className="block">

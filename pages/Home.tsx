@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import FAQList from '../components/FAQList';
 import { ArrowRight, Building2, ChartNoAxesColumn, DollarSign, ShieldCheck, TrendingUp } from 'lucide-react';
+import { INDUSTRIES, ICON_MAP } from '../constants';
 
 const HOME_FAQS = [
   {
@@ -184,6 +185,37 @@ const Home: React.FC = () => {
 
       <section className="py-20 bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-brand-dark mb-4">Industries We Serve</h2>
+            <p className="text-brand-secondary max-w-3xl mx-auto text-lg mb-10">
+              Dedicated execution pathways across Arizona trade categories.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
+            {Object.values(INDUSTRIES).map((industry) => {
+              const Icon = ICON_MAP[industry.iconName];
+              return (
+                <Link
+                  key={industry.slug}
+                  to={`/${industry.slug}`}
+                  className="group bg-white p-6 rounded-xl shadow-sm border border-brand-border hover:shadow-md hover:border-brand-accent transition-all duration-300"
+                >
+                  <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center text-brand-dark mb-4 group-hover:bg-brand-accent group-hover:text-white transition-colors">
+                    {Icon && <Icon className="w-6 h-6" />}
+                  </div>
+                  <h3 className="font-bold text-lg text-brand-dark mb-2">{industry.name}</h3>
+                  <p className="text-sm text-brand-secondary line-clamp-2 mb-4">
+                    {industry.heroSubheadline}
+                  </p>
+                  <div className="flex items-center text-brand-accent text-sm font-semibold group-hover:translate-x-1 transition-transform">
+                    View Service Path <ArrowRight className="w-4 h-4 ml-1" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-brand-dark mb-4">High-Value Project Execution</h2>
             <p className="text-brand-secondary max-w-3xl mx-auto text-lg">
