@@ -26,27 +26,43 @@ const Home: React.FC = () => {
       {/* Hero Section */}
       <section className="relative bg-brand-surface border-b border-brand-border overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-6">
-              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-              Live Market Data Active
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-6">
+                <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                Live Market Data Active
+              </div>
+              <h1 className="text-4xl md:text-6xl font-extrabold text-brand-dark tracking-tight leading-tight mb-6">
+                Real-Time Construction Intelligence. <br/>
+                <span className="text-brand-accent">Absolute Price Transparency.</span>
+              </h1>
+              <p className="text-lg md:text-xl text-brand-secondary mb-10 leading-relaxed max-w-2xl">
+                Atlas Construction Intelligence is an independent permit intelligence and coordination firm for Phoenix-area property owners. We monitor public permits, flag risk or delay signals, and provide clear coordination support when projects stall. We are not a contractor.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link to="/request-audit">
+                  <Button as="span" size="lg">Request a Price Audit</Button>
+                </Link>
+                <Link to="/how-it-works">
+                  <Button as="span" variant="outline" size="lg">
+                    How Atlas Works
+                  </Button>
+                </Link>
+              </div>
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold text-brand-dark tracking-tight leading-tight mb-6">
-              Real-Time Construction Intelligence. <br/>
-              <span className="text-brand-accent">Absolute Price Transparency.</span>
-            </h1>
-            <p className="text-lg md:text-xl text-brand-secondary mb-10 leading-relaxed max-w-2xl">
-              Atlas Construction Intelligence is an independent permit intelligence and coordination firm for Phoenix-area property owners. We monitor public permits, flag risk or delay signals, and provide clear coordination support when projects stall. We are not a contractor.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/request-audit">
-                <Button as="span" size="lg">Request a Price Audit</Button>
-              </Link>
-              <Link to="/how-it-works">
-                <Button as="span" variant="outline" size="lg">
-                  How Atlas Works
-                </Button>
-              </Link>
+
+            <div className="md:justify-self-end w-full max-w-xl">
+              <div className="relative rounded-2xl border border-brand-border bg-white shadow-[0_20px_60px_rgba(15,23,42,0.12)] overflow-hidden">
+                <img
+                  src="/images/intelligence.png"
+                  alt="Construction intelligence graphic"
+                  className="w-full h-auto block"
+                  loading="eager"
+                />
+              </div>
+              <div className="text-xs text-slate-500 mt-3">
+                Image file: <code>/public/images/intelligence.png</code>
+              </div>
             </div>
           </div>
         </div>
