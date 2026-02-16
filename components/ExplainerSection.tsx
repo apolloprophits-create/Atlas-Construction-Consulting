@@ -10,11 +10,11 @@ const ExplainerSection: React.FC = () => {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-dark/5 text-brand-dark text-xs font-bold uppercase tracking-wider mb-4">
              <ShieldCheck className="w-4 h-4" />
-             Methodology
+             Atlas Model
           </div>
-          <h2 className="text-3xl font-bold text-brand-dark mb-4">What Is an Atlas Audit?</h2>
+          <h2 className="text-3xl font-bold text-brand-dark mb-4">The Direct-to-Labor Model</h2>
           <p className="text-brand-secondary max-w-2xl mx-auto text-lg">
-            We are an independent intelligence firm, not a lead generation agency. Our audits are purely data-driven, leveraging county permit records to protect homeowner equity.
+            Atlas acts as your intelligence partner and owner's representative. We define scope, route projects to licensed trades, and manage execution quality from bid to completion.
           </p>
         </div>
 
@@ -23,37 +23,37 @@ const ExplainerSection: React.FC = () => {
              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-brand-accent mb-4">
                <Database className="w-6 h-6" />
              </div>
-             <h3 className="font-bold text-lg text-brand-dark mb-2">Permit Intelligence</h3>
+             <h3 className="font-bold text-lg text-brand-dark mb-2">Specify and Bid</h3>
              <p className="text-sm text-brand-secondary">
-               We monitor Maricopa County permit databases in real-time. When a permit is issued, we pull the valuation data declared by the contractor.
+               We use market intelligence to define scope and secure fixed-rate bids from ROC-licensed execution partners.
              </p>
           </div>
           <div className="bg-white p-6 rounded-xl border border-brand-border shadow-sm flex flex-col items-center text-center">
              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-brand-accent mb-4">
                <Search className="w-6 h-6" />
              </div>
-             <h3 className="font-bold text-lg text-brand-dark mb-2">Market Benchmarking</h3>
+             <h3 className="font-bold text-lg text-brand-dark mb-2">Contract Transparency</h3>
              <p className="text-sm text-brand-secondary">
-               We compare your project's valuation against thousands of similar, recently completed projects in your specific zip code.
+               You contract directly with the licensed trade performing labor and materials. No hidden pricing layers.
              </p>
           </div>
           <div className="bg-white p-6 rounded-xl border border-brand-border shadow-sm flex flex-col items-center text-center">
              <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-brand-accent mb-4">
                <ShieldCheck className="w-6 h-6" />
              </div>
-             <h3 className="font-bold text-lg text-brand-dark mb-2">Conflict-Free Advocacy</h3>
+             <h3 className="font-bold text-lg text-brand-dark mb-2">Managed Execution</h3>
              <p className="text-sm text-brand-secondary">
-               We do not sell leads. We do not take commissions. Our only goal is to tell you if the price you are paying is fair.
+               Atlas coordinates schedule, permits, inspections, and quality control so you get wholesale efficiency without self-managing the build.
              </p>
           </div>
         </div>
 
         <div className="text-center">
           <Link to="/request-audit">
-            <Button as="span" size="lg">Request a Price Audit</Button>
+            <Button as="span" size="lg">Get a Fair Market Proposal</Button>
           </Link>
           <p className="text-xs text-slate-400 mt-4">
-            Independent. Confidential. Data-Backed.
+            Transparent Scope. Licensed Trades. Managed Delivery.
           </p>
         </div>
       </div>

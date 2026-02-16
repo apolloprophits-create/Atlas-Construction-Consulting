@@ -62,7 +62,6 @@ const App: React.FC = () => {
         {/* Private / Internal Routes */}
         <Route path="/audit/:secureId" element={<AuditReport />} />
         <Route path="/internal/create-audit" element={<Layout><InternalCreateAudit /></Layout>} />
-        <Route path="/partner-portal" element={<Navigate to="/internal/create-audit" replace />} />
         <Route path="/internal/partner-reviews" element={<Layout><InternalPartnerReview /></Layout>} />
         {/* Fallback */}
         <Route path="*" element={<Layout><Home /></Layout>} />
