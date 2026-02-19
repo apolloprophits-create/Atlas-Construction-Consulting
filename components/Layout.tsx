@@ -75,10 +75,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 ))}
               </div>
               <Link to="/about" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">About</Link>
-              <Link to="/how-it-works" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">How it works</Link>
+              <Link to="/how-it-works" className="font-medium text-sm text-brand-secondary hover:text-brand-dark transition-colors">How It Works</Link>
               <Link to="/request-audit">
                 <Button as="span" variant="primary" size="sm">
-                  Request Price Audit
+                  Get a Quote
                 </Button>
               </Link>
             </div>
@@ -111,9 +111,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
              </div>
              <div className="border-t border-brand-border pt-4 flex flex-col gap-4">
                 <Link to="/about" className="text-base font-medium text-brand-dark">About</Link>
-                <Link to="/how-it-works" className="text-base font-medium text-brand-dark">How it works</Link>
+                <Link to="/how-it-works" className="text-base font-medium text-brand-dark">How It Works</Link>
                 <Link to="/request-audit" className="block">
-                  <Button as="span" fullWidth>Request Audit</Button>
+                  <Button as="span" fullWidth>Get a Quote</Button>
                 </Link>
              </div>
           </div>
@@ -150,8 +150,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <ul className="space-y-2 text-slate-400">
                 <li><Link to="/about" className="hover:text-white transition-colors">About Atlas</Link></li>
                 <li><Link to="/how-it-works" className="hover:text-white transition-colors">Our Process</Link></li>
-                <li><Link to="/what-is-a-construction-price-audit" className="hover:text-white transition-colors">What is a Price Audit?</Link></li>
-                <li><Link to="/request-audit" className="hover:text-white transition-colors">Request Audit</Link></li>
+                <li><Link to="/global-procurement" className="hover:text-white transition-colors">Global Procurement</Link></li>
+                <li><Link to="/what-is-a-construction-price-audit" className="hover:text-white transition-colors">How Pricing Works</Link></li>
+                <li><Link to="/request-audit" className="hover:text-white transition-colors">Get a Quote</Link></li>
                 <li><Link to="/partner/rate-card" className="hover:text-white transition-colors">Partner Rate Card</Link></li>
                 <li><Link to="/internal/create-audit" className="hover:text-white transition-colors">Internal Access</Link></li>
                 <li><Link to="/internal/partner-reviews" className="hover:text-white transition-colors">Partner Reviews</Link></li>
@@ -161,6 +162,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
             <p>&copy; {new Date().getFullYear()} Atlas Construction Intelligence. All rights reserved.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
+              <Link to="/global-procurement" className="hover:text-white transition-colors">Global Procurement</Link>
               <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
               <Link to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
             </div>

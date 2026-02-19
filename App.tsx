@@ -14,6 +14,8 @@ import AuditReport from './pages/AuditReport';
 import WhatIsAudit from './pages/WhatIsAudit';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import GlobalProcurement from './pages/GlobalProcurement';
+import SourcingStatusTracking from './pages/SourcingStatusTracking';
 import AuditAuthorization, { AuditAuthorizationSuccess } from './pages/AuditAuthorization';
 import PartnerMasterSubcontractor from './pages/PartnerMasterSubcontractor';
 import InternalPartnerReview from './pages/InternalPartnerReview';
@@ -46,6 +48,11 @@ const App: React.FC = () => {
         <Route path="/how-it-works" element={<Layout><HowItWorks /></Layout>} />
         <Route path="/what-is-a-construction-price-audit" element={<Layout><WhatIsAudit /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
+        <Route path="/global-procurement" element={<Layout><GlobalProcurement /></Layout>} />
+        <Route
+          path="/global-procurement/sourcing-status-tracking"
+          element={<Layout><SourcingStatusTracking /></Layout>}
+        />
         <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
         <Route path="/terms-of-service" element={<Layout><TermsOfService /></Layout>} />
         <Route path="/request-audit" element={<Layout><RequestAudit /></Layout>} />
