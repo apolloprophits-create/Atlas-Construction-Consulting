@@ -10,6 +10,8 @@
     { "source": "/how-it-works", "destination": "/" },
     { "source": "/what-is-a-construction-price-audit", "destination": "/" },
     { "source": "/contact", "destination": "/" },
+    { "source": "/global-procurement", "destination": "/" },
+    { "source": "/global-procurement/sourcing-status-tracking", "destination": "/" },
     { "source": "/privacy-policy", "destination": "/" },
     { "source": "/terms-of-service", "destination": "/" },
     { "source": "/request-audit", "destination": "/" },
